@@ -38,14 +38,9 @@ public class garageControllerTest {
 
     @Test
     public void addNewGarage() throws Exception {
-
         GarageEntity garageEntity = new GarageEntity();
         garageEntity.setGarageId(UUID.randomUUID());
         garageEntity.setGarageName("Justin");
-
-        GarageEntity expectedGarageEntity = new GarageEntity();
-        when(garageRepository.save(garageEntity))
-                .thenReturn(expectedGarageEntity);
 
         mockMvc.perform(post("/garages")
                 .accept(MediaType.APPLICATION_JSON)
