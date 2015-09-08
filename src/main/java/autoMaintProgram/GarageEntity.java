@@ -2,12 +2,10 @@ package autoMaintProgram;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.UUID;
-
 public class GarageEntity {
 
     @Id
-    private UUID garageId;
+    private String garageId;
 
     private String garageName;
 
@@ -20,11 +18,11 @@ public class GarageEntity {
         return garageName;
     }
 
-    public void setGarageId(UUID garageId) {
+    public void setGarageId(String garageId) {
         this.garageId = garageId;
     }
 
-    public UUID getGarageId() {
+    public String getGarageId() {
         return garageId;
     }
 }
