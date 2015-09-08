@@ -18,7 +18,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -73,7 +72,7 @@ public class addNewGarage {
         GarageEntity savedGarage = garageEntityList.get(0);
 
         assertThat(savedGarage.getGarageName(), is("Justin"));
-        assertThat(savedGarage.getGarageId(), isA(UUID.class));
+        assertThat(savedGarage.getGarageId(), isA(String.class));
 
     }
 }

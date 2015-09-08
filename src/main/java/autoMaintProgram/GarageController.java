@@ -17,6 +17,15 @@ public class GarageController {
         this.garageRepository = garageRepository;
     }
 
+    @RequestMapping(
+            value = "/garages/{garageId}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public GarageEntity retrieveGarage(@PathVariable String garageId) {
+        return garageRepository.findOne(garageId);
+    }
 
     @RequestMapping(
             value = "/garages",
@@ -26,7 +35,7 @@ public class GarageController {
     @ResponseStatus(HttpStatus.CREATED)
     public GarageEntity addNewGarage(@RequestBody GarageEntity garageEntity) {
 
-        garageEntity.setGarageId(UUID.randomUUID());
+        garageEntity.setGarageId(UUID.randomUUID().toString());
         garageRepository.save(garageEntity);
 
         return garageEntity;

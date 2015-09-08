@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -39,7 +40,7 @@ public class garageControllerTest {
     @Test
     public void addNewGarage() throws Exception {
         GarageEntity garageEntity = new GarageEntity();
-        garageEntity.setGarageId(UUID.randomUUID());
+        garageEntity.setGarageId(UUID.randomUUID().toString());
         garageEntity.setGarageName("Justin");
 
         mockMvc.perform(post("/garages")
@@ -49,6 +50,18 @@ public class garageControllerTest {
                 .andExpect(status().isCreated());
 
         verify(garageRepository, times(1)).save(isA(GarageEntity.class));
+        verifyNoMoreInteractions(garageRepository);
+    }
+
+    @Test
+    public void retrieveGarage() throws Exception {
+        mockMvc.perform(get("/garages/{id}", "id")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isOk());
+
+        verify(garageRepository, times(1)).findOne("id");
         verifyNoMoreInteractions(garageRepository);
     }
 }
