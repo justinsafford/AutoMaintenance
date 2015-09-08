@@ -64,6 +64,7 @@ public class retrieveGarage {
         GarageEntity actualGarage;
         actualGarage = garageController.retrieveGarage(garageUuid);
 
+        assertThat(garageRepository.count(), is(1L));
         assertThat(actualGarage.getGarageId(), is(garageUuid));
         assertThat(actualGarage.getGarageName(), is("Justin"));
         //        ClassPathResource classPathResource = new ClassPathResource("responses/retrieveGarage.json");
