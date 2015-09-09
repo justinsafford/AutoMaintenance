@@ -10,6 +10,7 @@ import java.util.UUID;
 @RestController
 public class VehicleController {
 
+    @Autowired
     GarageRepository garageRepository;
 
     @Autowired
@@ -22,9 +23,9 @@ public class VehicleController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public VehicleEntity addNewVehicle(@PathVariable String garageId,
-                                       @RequestBody VehicleRequest vehicleRequest){
+                                       @RequestBody VehicleRequest vehicleRequest) {
 
-        if(garageRepository.findOne(garageId) == null){
+        if (garageRepository.findOne(garageId) == null) {
             throw new ResourcesNotFoundException("GarageId not found");
         }
 
@@ -39,5 +40,12 @@ public class VehicleController {
         vehicleRepository.save(vehicleEntity);
 
         return vehicleEntity;
+    }
+
+    @RequestMapping(
+            value = "/garages//vehicles", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void submitVehicleWithMissingGarage() {
+        throw new ResourcesNotFoundException("GarageId is required");
     }
 }

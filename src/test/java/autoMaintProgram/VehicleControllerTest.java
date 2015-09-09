@@ -12,8 +12,6 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
-
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -79,8 +77,6 @@ public class vehicleControllerTest {
     @Test
     public void addNewVehicleWithUnknownGarage_ReturnNotFound() throws Exception {
         GarageEntity garageEntity = new GarageEntity();
-        garageEntity.setGarageId(UUID.randomUUID().toString());
-        garageEntity.setGarageName("Justin");
         when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
@@ -90,6 +86,21 @@ public class vehicleControllerTest {
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
+                .andReturn();
+    }
+
+    @Test
+    public void addNewVehicleWithMissingGarage_ReturnNotFound() throws Exception {
+        GarageEntity garageEntity = new GarageEntity();
+        when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
+
+        expectedException.expectCause(isA(ResourcesNotFoundException.class));
+        expectedException.expectMessage("GarageId is required");
+
+        mockMvc.perform(post("/garages/{garageId}/vehicles", "")
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
                 .andReturn();
     }
 }
