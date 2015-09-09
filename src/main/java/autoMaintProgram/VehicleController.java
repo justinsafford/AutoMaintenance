@@ -10,7 +10,7 @@ import java.util.UUID;
 @RestController
 public class VehicleController {
 
-//    private GarageRepository garageRepository;
+    GarageRepository garageRepository;
 
     @Autowired
     VehicleRepository vehicleRepository;
@@ -24,7 +24,10 @@ public class VehicleController {
     public VehicleEntity addNewVehicle(@PathVariable String garageId,
                                        @RequestBody VehicleRequest vehicleRequest){
 
-//        garageRepository.findOne(garageId);
+        if(garageRepository.findOne(garageId) == null){
+            throw new ResourcesNotFoundException("GarageId not found");
+        }
+
         VehicleEntity vehicleEntity = new VehicleEntity();
         vehicleEntity.setVehicleId(UUID.randomUUID().toString());
         vehicleEntity.setGarageId(garageId);
@@ -34,7 +37,7 @@ public class VehicleController {
         vehicleEntity.setVehicleModel(vehicleRequest.getVehicleModel());
 
         vehicleRepository.save(vehicleEntity);
-        
+
         return vehicleEntity;
     }
 }

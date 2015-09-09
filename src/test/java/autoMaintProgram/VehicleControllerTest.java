@@ -3,13 +3,18 @@ package autoMaintProgram;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
+import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +29,9 @@ public class vehicleControllerTest {
 
     @InjectMocks
     VehicleController vehicleController;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     MockMvc mockMvc;
 
@@ -52,7 +60,7 @@ public class vehicleControllerTest {
                 .content("{}"))
                 .andExpect(status().isCreated());
 
-        verify(vehicleRepository, times(1)).save(isA(VehicleEntity.class));
+        verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleEntity.class));
         verifyNoMoreInteractions(vehicleRepository);
     }
 
@@ -67,4 +75,21 @@ public class vehicleControllerTest {
 //        verify(garageRepository, times(1)).findOne("id");
 //        verifyNoMoreInteractions(garageRepository);
 //    }
+
+    @Test
+    public void addNewVehicleWithUnknownGarage_ReturnNotFound() throws Exception {
+        GarageEntity garageEntity = new GarageEntity();
+        garageEntity.setGarageId(UUID.randomUUID().toString());
+        garageEntity.setGarageName("Justin");
+        when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
+
+        expectedException.expectCause(isA(ResourcesNotFoundException.class));
+        expectedException.expectMessage("GarageId not found");
+
+        mockMvc.perform(post("/garages/{garageId}/vehicles", "id")
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn();
+    }
 }
