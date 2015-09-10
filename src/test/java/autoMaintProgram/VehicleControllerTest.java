@@ -12,6 +12,9 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -65,10 +68,8 @@ public class vehicleControllerTest {
 
     @Test
     public void retrieveVehicleFromGarage() throws Exception {
-        GarageEntity garageEntity = new GarageEntity();
-        when(garageRepository.findOne("gId")).thenReturn(garageEntity);
         VehicleEntity vehicleEntity = new VehicleEntity();
-        when(vehicleRepository.findOne("vId")).thenReturn(vehicleEntity);
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(vehicleEntity);
 
         mockMvc.perform(get("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
                 .accept(MediaType.APPLICATION_JSON)
@@ -76,19 +77,19 @@ public class vehicleControllerTest {
                 .content("{}"))
                 .andExpect(status().isOk());
 
-        verify(garageRepository, times(1)).findOne("gId");
-        verify(vehicleRepository, times(1)).findOne("vId");
-        verifyNoMoreInteractions(garageRepository, vehicleRepository);
+        verify(vehicleRepository, times(1)).findFirstByGarageIdAndVehicleId("gId", "vId");
+        verifyNoMoreInteractions(vehicleRepository);
     }
 
     @Test
-    public void retrieveVehicleWithUnknownGarageId_throwsNotFoundException() throws Exception {
-        when(garageRepository.findOne("gId")).thenReturn(null);
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        when(vehicleRepository.findOne("vId")).thenReturn(vehicleEntity);
+    public void retrieveVehicleWithMismatchingIds_throwsNotFoundException() throws Exception {
+        GarageEntity garageEntity = new GarageEntity();
+        when(garageRepository.findOne("gId")).thenReturn(garageEntity);
+
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
-        expectedException.expectMessage("GarageId was not found");
+        expectedException.expectMessage("Vehicle not found");
 
         mockMvc.perform(get("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
                 .accept(MediaType.APPLICATION_JSON)
@@ -98,15 +99,28 @@ public class vehicleControllerTest {
     }
 
     @Test
-    public void retrieveVehicleWithUnknownVehicleId_throwsNotFoundException() throws Exception {
-        GarageEntity garageEntity = new GarageEntity();
-        when(garageRepository.findOne("gId")).thenReturn(garageEntity);
-        when(vehicleRepository.findOne("vId")).thenReturn(null);
+    public void retrieveMultipleVehiclesFromGarage() throws Exception {
+        List<VehicleEntity> vehicleEntityList = new ArrayList<>();
+        when(vehicleRepository.findAllByGarageId("gId")).thenReturn(vehicleEntityList);
+
+        mockMvc.perform(get("/garages/{garageId}/vehicles", "gId")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isOk());
+
+        verify(vehicleRepository, times(1)).findAllByGarageId("gId");
+        verifyNoMoreInteractions(vehicleRepository);
+    }
+
+    @Test
+    public void retrieveMultipleVehiclesWithNoVehiclesInGarage_ReturnNotFound() throws Exception {
+        when(vehicleRepository.findAllByGarageId("gId")).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
-        expectedException.expectMessage("VehicleId was not found");
+        expectedException.expectMessage("Vehicle not found");
 
-        mockMvc.perform(get("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
+        mockMvc.perform(get("/garages/{garageId}/vehicles", "gId")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))

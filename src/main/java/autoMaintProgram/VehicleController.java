@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,7 +23,7 @@ public class VehicleController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.CREATED)
-    public VehicleEntity addNewVehicle(@PathVariable String garageId,
+    public VehicleEntity addNewVehicleToGarage(@PathVariable String garageId,
                                        @RequestBody VehicleRequest vehicleRequest) {
 
         if (garageRepository.findOne(garageId) == null) {
@@ -48,22 +49,32 @@ public class VehicleController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.OK)
-    public VehicleEntity findVehicle(@PathVariable String garageId,
+    public VehicleEntity findVehicleInGarage(@PathVariable String garageId,
                                        @PathVariable String vehicleId) {
 
-        if(garageRepository.findOne(garageId) == null){
-            throw new ResourcesNotFoundException("GarageId was not found");
-        }
-
-        VehicleEntity vehicleEntity = vehicleRepository.findOne(vehicleId);
-
+        VehicleEntity vehicleEntity = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
         if(vehicleEntity == null){
-            throw new ResourcesNotFoundException("VehicleId was not found");
+            throw new ResourcesNotFoundException("Vehicle not found");
         }
 
         return vehicleEntity;
     }
-    
+
+    @RequestMapping(
+            value = "/garages/{garageId}/vehicles",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public List<VehicleEntity> findAllVehiclesInGarage(@PathVariable String garageId) {
+        List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);
+        //TODO:Check this logic..
+        if (vehicleEntityList == null ) {
+            throw new ResourcesNotFoundException("Vehicle not found");
+        }
+        return vehicleEntityList;
+    }
+
     @RequestMapping(
             value = "/garages//vehicles", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.NOT_FOUND)

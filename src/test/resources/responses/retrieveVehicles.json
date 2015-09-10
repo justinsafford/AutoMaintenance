@@ -1,0 +1,18 @@
+[
+  {
+    "garageId":"gId",
+    "vehicleId":"vId1",
+    "vehicleName":"Taylor",
+    "vehicleYear":"2004",
+    "vehicleMake":"Chevy",
+    "vehicleModel":"Silverado"
+  },
+  {
+    "garageId":"gId",
+    "vehicleId":"vId2",
+    "vehicleName":"Tito",
+    "vehicleYear":"2014",
+    "vehicleMake":"Chevy",
+    "vehicleModel":"Silverado"
+  }
+]
