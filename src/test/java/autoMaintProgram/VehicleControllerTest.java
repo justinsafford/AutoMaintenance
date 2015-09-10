@@ -128,6 +128,18 @@ public class vehicleControllerTest {
     }
 
     @Test
+    public void retrieveMultipleVehiclesWithNoGarageId_ReturnNotFound() throws Exception {
+        expectedException.expectCause(isA(ResourcesNotFoundException.class));
+        expectedException.expectMessage("Garage is required");
+
+        mockMvc.perform(get("/garages//vehicles")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void addNewVehicleWithUnknownGarage_ReturnNotFound() throws Exception {
         GarageEntity garageEntity = new GarageEntity();
         when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
@@ -144,13 +156,10 @@ public class vehicleControllerTest {
 
     @Test
     public void addNewVehicleWithMissingGarage_ReturnNotFound() throws Exception {
-        GarageEntity garageEntity = new GarageEntity();
-        when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
-
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("GarageId is required");
 
-        mockMvc.perform(post("/garages/{garageId}/vehicles", "")
+        mockMvc.perform(post("/garages//vehicles")
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())

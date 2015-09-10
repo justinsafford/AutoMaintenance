@@ -66,7 +66,9 @@ public class VehicleController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.OK)
+
     public List<VehicleEntity> findAllVehiclesInGarage(@PathVariable String garageId) {
+
         List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);
         //TODO:Check this logic..
         if (vehicleEntityList == null ) {
@@ -80,5 +82,12 @@ public class VehicleController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void submitVehicleWithMissingGarage() {
         throw new ResourcesNotFoundException("GarageId is required");
+    }
+
+    @RequestMapping(
+            value = "/garages//vehicles", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void retrieveVehiclesWithMissingGarage() {
+        throw new ResourcesNotFoundException("Garage is required");
     }
 }
