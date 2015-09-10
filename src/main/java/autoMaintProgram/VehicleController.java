@@ -43,6 +43,28 @@ public class VehicleController {
     }
 
     @RequestMapping(
+            value = "/garages/{garageId}/vehicles/{vehicleId}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public VehicleEntity findVehicle(@PathVariable String garageId,
+                                       @PathVariable String vehicleId) {
+
+        if(garageRepository.findOne(garageId) == null){
+            throw new ResourcesNotFoundException("GarageId was not found");
+        }
+
+        VehicleEntity vehicleEntity = vehicleRepository.findOne(vehicleId);
+
+        if(vehicleEntity == null){
+            throw new ResourcesNotFoundException("VehicleId was not found");
+        }
+
+        return vehicleEntity;
+    }
+    
+    @RequestMapping(
             value = "/garages//vehicles", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void submitVehicleWithMissingGarage() {
