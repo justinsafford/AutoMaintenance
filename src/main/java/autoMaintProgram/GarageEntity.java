@@ -9,7 +9,6 @@ public class GarageEntity {
 
     private String garageName;
 
-
     public void setGarageName(String garageName) {
         this.garageName = garageName;
     }
