@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -165,4 +166,39 @@ public class vehicleControllerTest {
                 .andExpect(status().isNotFound())
                 .andReturn();
     }
+
+    @Test
+    public void deleteGarage() throws Exception {
+        VehicleEntity vehicleEntity = new VehicleEntity();
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
+                .thenReturn(vehicleEntity);
+
+        mockMvc.perform(delete("/garages/{gId}/vehicles/{vId}", "gId", "vId")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(vehicleRepository, times(1)).findFirstByGarageIdAndVehicleId("gId", "vId");
+        verify(vehicleRepository, times(1)).delete("vId");
+        verifyNoMoreInteractions(vehicleRepository);
+    }
+
+    @Test
+    public void deleteGarageWithUnknownVehicleId_ReturnNotFound() throws Exception {
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
+                .thenReturn(null);
+
+        expectedException.expectCause(isA(ResourcesNotFoundException.class));
+        expectedException.expectMessage("Vehicle not found");
+
+        mockMvc.perform(delete("/garages/{garageId}/vehicles/{vehicleId}", "garageId", "vehicleId")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
 }

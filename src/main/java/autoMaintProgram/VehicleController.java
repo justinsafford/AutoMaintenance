@@ -24,7 +24,7 @@ public class VehicleController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public VehicleEntity addNewVehicleToGarage(@PathVariable String garageId,
-                                       @RequestBody VehicleRequest vehicleRequest) {
+                                               @RequestBody VehicleRequest vehicleRequest) {
 
         if (garageRepository.findOne(garageId) == null) {
             throw new ResourcesNotFoundException("GarageId not found");
@@ -50,10 +50,10 @@ public class VehicleController {
     )
     @ResponseStatus(HttpStatus.OK)
     public VehicleEntity findVehicleInGarage(@PathVariable String garageId,
-                                       @PathVariable String vehicleId) {
+                                             @PathVariable String vehicleId) {
 
         VehicleEntity vehicleEntity = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
-        if(vehicleEntity == null){
+        if (vehicleEntity == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
 
@@ -71,10 +71,24 @@ public class VehicleController {
 
         List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);
         //TODO:Check this logic..
-        if (vehicleEntityList == null ) {
+        if (vehicleEntityList == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
         return vehicleEntityList;
+    }
+
+    @RequestMapping(
+            value = "/garages/{garageId}/vehicles/{vehicleId}",
+            method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteVehicleInGarage(@PathVariable String garageId,
+                                      @PathVariable String vehicleId) {
+        if(vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId) == null) {
+            throw new ResourcesNotFoundException("Vehicle not found");
+        }
+        vehicleRepository.delete(vehicleId);
     }
 
     @RequestMapping(

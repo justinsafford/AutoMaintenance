@@ -40,4 +40,19 @@ public class GarageController {
 
         return garageEntity;
     }
+
+    @RequestMapping(
+            value = "/garages/{garageId}",
+            method = RequestMethod.DELETE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteGarage(@PathVariable String garageId) {
+
+        if(garageRepository.findOne(garageId) == null) {
+            throw new ResourcesNotFoundException("Garage not found");
+        }
+        garageRepository.delete(garageId);
+
+    }
 }
