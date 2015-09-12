@@ -1,6 +1,8 @@
 package autoMaintProgram.integrationTests;
 
-import autoMaintProgram.*;
+import autoMaintProgram.Application;
+import autoMaintProgram.GarageEntity;
+import autoMaintProgram.GarageRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +18,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,18 +31,13 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class addNewVehicle {
-    @Autowired
-    WebApplicationContext webApplicationContext;
+public class addNewGarageTest {
 
     @Autowired
     GarageRepository garageRepository;
 
     @Autowired
-    VehicleRepository vehicleRepository;
-
-    @Autowired
-    VehicleController vehicleController;
+    WebApplicationContext webApplicationContext;
 
     MockMvc mockMvc;
 
@@ -57,35 +53,26 @@ public class addNewVehicle {
     @Before
     public void clearDb() {
         garageRepository.deleteAll();
-        vehicleRepository.deleteAll();
     }
 
     @Test
-    public void addNewVehicle_Success() throws Exception {
-        ClassPathResource classPathResource = new ClassPathResource("requests/addVehicle.json");
+    public void addNewGarage() throws Exception {
+        ClassPathResource classPathResource = new ClassPathResource("requests/addGarage.json");
         String request = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
 
-        GarageEntity garageEntity = new GarageEntity();
-        String garageUuid = UUID.randomUUID().toString();
-        garageEntity.setGarageId(garageUuid);
-        garageEntity.setGarageName("Justin");
-        garageRepository.save(garageEntity);
-
-        mockMvc.perform(post("/garages/{garageId}/vehicles", garageEntity.getGarageId())
+        mockMvc.perform(post("/garages")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        List<VehicleEntity> vehicleEntityList = vehicleRepository.findAll();
-        assertThat(vehicleEntityList.size(), is(1));
-        VehicleEntity savedVehicle = vehicleEntityList.get(0);
 
-        assertThat(savedVehicle.getGarageId(), is(garageUuid));
-        assertThat(savedVehicle.getVehicleId(), isA(String.class));
-        assertThat(savedVehicle.getVehicleName(), is("Tito"));
-        assertThat(savedVehicle.getVehicleYear(), is("2014"));
-        assertThat(savedVehicle.getVehicleMake(), is("Chevy"));
-        assertThat(savedVehicle.getVehicleModel(), is("Silverado"));
+        List<GarageEntity> garageEntityList = garageRepository.findAll();
+        assertThat(garageEntityList.size(), is(1));
+        GarageEntity savedGarage = garageEntityList.get(0);
+
+        assertThat(savedGarage.getGarageName(), is("Justin"));
+        assertThat(savedGarage.getGarageId(), isA(String.class));
+
     }
 }

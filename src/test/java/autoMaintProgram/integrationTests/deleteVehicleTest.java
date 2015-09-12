@@ -1,9 +1,6 @@
 package autoMaintProgram.integrationTests;
 
-import autoMaintProgram.Application;
-import autoMaintProgram.GarageController;
-import autoMaintProgram.GarageEntity;
-import autoMaintProgram.GarageRepository;
+import autoMaintProgram.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,16 +23,19 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class retrieveGarage {
+public class deleteVehicleTest {
 
     @Autowired
     GarageRepository garageRepository;
 
     @Autowired
+    VehicleRepository vehicleRepository;
+
+    @Autowired
     WebApplicationContext webApplicationContext;
 
     @Autowired
-    GarageController garageController;
+    VehicleController vehicleController;
 
     MockMvc mockMvc;
 
@@ -50,10 +50,11 @@ public class retrieveGarage {
     @Before
     public void clearDb() {
         garageRepository.deleteAll();
+        vehicleRepository.deleteAll();
     }
 
     @Test
-    public void retrieveGarageById() throws Exception {
+    public void deleteVehicle() throws Exception {
         GarageEntity expectedGarage = new GarageEntity();
         String garageUuid = UUID.randomUUID().toString();
         expectedGarage.setGarageId(garageUuid);
@@ -61,17 +62,19 @@ public class retrieveGarage {
 
         garageRepository.save(expectedGarage);
 
-        GarageEntity actualGarage;
-        actualGarage = garageController.retrieveGarage(garageUuid);
+        VehicleEntity vehicleEntity = new VehicleEntity();
+        vehicleEntity.setGarageId(garageUuid);
+        String vehicleUuid = UUID.randomUUID().toString();
+        vehicleEntity.setVehicleId(vehicleUuid);
+
+        vehicleRepository.save(vehicleEntity);
 
         assertThat(garageRepository.count(), is(1L));
-        assertThat(actualGarage.getGarageId(), is(garageUuid));
-        assertThat(actualGarage.getGarageName(), is("Justin"));
-        //        ClassPathResource classPathResource = new ClassPathResource("responses/retrieveGarage.json");
-        //        String expectedJson = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
-        //TODO:Get this test working - content type not set error..
-//        mockMvc.perform(get("/garages/{id}", garageUuid))
-//                .andExpect(content().json(expectedJson))
-//                .andExpect(status().isOk());
+        assertThat(vehicleRepository.count(), is(1L));
+
+        vehicleController.deleteVehicleInGarage(garageUuid, vehicleUuid);
+
+        assertThat(garageRepository.count(), is(1L));
+        assertThat(vehicleRepository.count(), is(0L));
     }
 }
