@@ -1,7 +1,7 @@
-package autoMaintProgram.integration.garage;
+package autoMaintProgram.integration.accident;
 
-import autoMaintProgram.AccidentEntity;
-import autoMaintProgram.AccidentRepository;
+import autoMaintProgram.accident.AccidentEntity;
+import autoMaintProgram.repos.AccidentRepository;
 import autoMaintProgram.Application;
 import autoMaintProgram.repos.VehicleRepository;
 import autoMaintProgram.vehicle.VehicleEntity;
@@ -54,6 +54,7 @@ public class addNewAccident_Test {
 
     @Before
     public void clearDb() {
+        vehicleRepository.deleteAll();
         accidentRepository.deleteAll();
     }
 

@@ -1,4 +1,4 @@
-package autoMaintProgram;
+package autoMaintProgram.accident;
 
 import org.springframework.data.annotation.Id;
 

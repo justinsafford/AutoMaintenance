@@ -1,5 +1,7 @@
-package autoMaintProgram;
+package autoMaintProgram.accident;
 
+import autoMaintProgram.repos.AccidentRepository;
+import autoMaintProgram.ResourcesNotFoundException;
 import autoMaintProgram.repos.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

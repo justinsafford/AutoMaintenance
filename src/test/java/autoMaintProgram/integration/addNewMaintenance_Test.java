@@ -1,8 +1,8 @@
-package autoMaintProgram.integration.vehicle;
+package autoMaintProgram.integration;
 
 import autoMaintProgram.Application;
-import autoMaintProgram.garage.GarageEntity;
-import autoMaintProgram.repos.GarageRepository;
+import autoMaintProgram.maintenance.MaintenanceEntity;
+import autoMaintProgram.repos.MaintenanceRepository;
 import autoMaintProgram.repos.VehicleRepository;
 import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
@@ -20,36 +20,33 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.isA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class addNewVehicle_Test {
-    @Autowired
-    WebApplicationContext webApplicationContext;
-
-    @Autowired
-    GarageRepository garageRepository;
+public class addNewMaintenance_Test {
 
     @Autowired
     VehicleRepository vehicleRepository;
+
+    @Autowired
+    MaintenanceRepository maintenanceRepository;
+
+    @Autowired
+    WebApplicationContext webApplicationContext;
 
     MockMvc mockMvc;
 
     @Before
     public void setupMock() {
         mockMvc = webAppContextSetup(webApplicationContext)
-                .defaultRequest(get("/")
+                .defaultRequest(post("/")
                         .accept(MediaType.APPLICATION_JSON))
                 .alwaysExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .build();
@@ -57,36 +54,29 @@ public class addNewVehicle_Test {
 
     @Before
     public void clearDb() {
-        garageRepository.deleteAll();
         vehicleRepository.deleteAll();
+        maintenanceRepository.deleteAll();
     }
 
     @Test
-    public void addNewVehicle_Success() throws Exception {
-        ClassPathResource classPathResource = new ClassPathResource("requests/addVehicle.json");
+    public void addNewGarage() throws Exception {
+        ClassPathResource classPathResource = new ClassPathResource("requests/addMaintenance.json");
         String request = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
 
-        GarageEntity garageEntity = new GarageEntity();
-        String garageUuid = UUID.randomUUID().toString();
-        garageEntity.setGarageId(garageUuid);
-        garageEntity.setGarageName("Justin");
-        garageRepository.save(garageEntity);
+        VehicleEntity vehicleEntity = new VehicleEntity();
+        vehicleEntity.setVehicleId("vId");
+        vehicleRepository.save(vehicleEntity);
 
-        mockMvc.perform(post("/garages/{garageId}/vehicles", garageEntity.getGarageId())
+        mockMvc.perform(post("/vehicles/{vehicleId}/maintenance", "vId")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.type", is("Change Oil")))
+                .andExpect(jsonPath("$.description", is("Change oil interval")))
+                .andExpect(jsonPath("$.mileageExpected", is("50,000")))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        List<VehicleEntity> vehicleEntityList = vehicleRepository.findAll();
-        assertThat(vehicleEntityList.size(), is(1));
-        VehicleEntity savedVehicle = vehicleEntityList.get(0);
-
-        assertThat(savedVehicle.getGarageId(), is(garageUuid));
-        assertThat(savedVehicle.getVehicleId(), isA(String.class));
-        assertThat(savedVehicle.getName(), is("Tito"));
-        assertThat(savedVehicle.getYear(), is("2014"));
-        assertThat(savedVehicle.getMake(), is("Chevy"));
-        assertThat(savedVehicle.getModel(), is("Silverado"));
+        List<MaintenanceEntity> maintenanceEntityList = maintenanceRepository.findAll();
+        assertThat(maintenanceEntityList.size(), is(1));
     }
 }
