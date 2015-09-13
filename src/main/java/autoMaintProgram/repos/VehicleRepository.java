@@ -1,5 +1,6 @@
-package autoMaintProgram;
+package autoMaintProgram.repos;
 
+import autoMaintProgram.vehicle.VehicleEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

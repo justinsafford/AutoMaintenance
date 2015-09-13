@@ -1,6 +1,6 @@
 {
-  "vehicleName":"Tito",
-  "vehicleYear":"2014",
-  "vehicleMake":"Chevy",
-  "vehicleModel":"Silverado"
+  "name":"Tito",
+  "year":"2014",
+  "make":"Chevy",
+  "model":"Silverado"
 }

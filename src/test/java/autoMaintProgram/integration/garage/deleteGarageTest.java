@@ -1,9 +1,9 @@
-package autoMaintProgram.integrationTests;
+package autoMaintProgram.integration.garage;
 
 import autoMaintProgram.Application;
-import autoMaintProgram.GarageController;
-import autoMaintProgram.GarageEntity;
-import autoMaintProgram.GarageRepository;
+import autoMaintProgram.garage.GarageController;
+import autoMaintProgram.garage.GarageEntity;
+import autoMaintProgram.repos.GarageRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

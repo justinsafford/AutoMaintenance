@@ -1,6 +1,11 @@
-package autoMaintProgram.integrationTests;
+package autoMaintProgram.integration.vehicle;
 
 import autoMaintProgram.*;
+import autoMaintProgram.garage.GarageEntity;
+import autoMaintProgram.repos.GarageRepository;
+import autoMaintProgram.repos.VehicleRepository;
+import autoMaintProgram.vehicle.VehicleController;
+import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,9 +88,9 @@ public class addNewVehicleTest {
 
         assertThat(savedVehicle.getGarageId(), is(garageUuid));
         assertThat(savedVehicle.getVehicleId(), isA(String.class));
-        assertThat(savedVehicle.getVehicleName(), is("Tito"));
-        assertThat(savedVehicle.getVehicleYear(), is("2014"));
-        assertThat(savedVehicle.getVehicleMake(), is("Chevy"));
-        assertThat(savedVehicle.getVehicleModel(), is("Silverado"));
+        assertThat(savedVehicle.getName(), is("Tito"));
+        assertThat(savedVehicle.getYear(), is("2014"));
+        assertThat(savedVehicle.getMake(), is("Chevy"));
+        assertThat(savedVehicle.getModel(), is("Silverado"));
     }
 }

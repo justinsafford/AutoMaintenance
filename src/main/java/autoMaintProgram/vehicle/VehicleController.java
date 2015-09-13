@@ -1,5 +1,8 @@
-package autoMaintProgram;
+package autoMaintProgram.vehicle;
 
+import autoMaintProgram.ResourcesNotFoundException;
+import autoMaintProgram.repos.GarageRepository;
+import autoMaintProgram.repos.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,12 +13,14 @@ import java.util.UUID;
 
 @RestController
 public class VehicleController {
-
-    @Autowired
     GarageRepository garageRepository;
+    VehicleRepository vehicleRepository;
 
     @Autowired
-    VehicleRepository vehicleRepository;
+    public VehicleController(GarageRepository garageRepository, VehicleRepository vehicleRepository) {
+        this.garageRepository = garageRepository;
+        this.vehicleRepository = vehicleRepository;
+    }
 
     @RequestMapping(
             value = "/garages/{garageId}/vehicles",
@@ -27,16 +32,16 @@ public class VehicleController {
                                                @RequestBody VehicleRequest vehicleRequest) {
 
         if (garageRepository.findOne(garageId) == null) {
-            throw new ResourcesNotFoundException("GarageId not found");
+            throw new ResourcesNotFoundException("Garage not found");
         }
 
         VehicleEntity vehicleEntity = new VehicleEntity();
         vehicleEntity.setVehicleId(UUID.randomUUID().toString());
         vehicleEntity.setGarageId(garageId);
-        vehicleEntity.setVehicleName(vehicleRequest.getVehicleName());
-        vehicleEntity.setVehicleYear(vehicleRequest.getVehicleYear());
-        vehicleEntity.setVehicleMake(vehicleRequest.getVehicleMake());
-        vehicleEntity.setVehicleModel(vehicleRequest.getVehicleModel());
+        vehicleEntity.setName(vehicleRequest.getName());
+        vehicleEntity.setYear(vehicleRequest.getYear());
+        vehicleEntity.setMake(vehicleRequest.getMake());
+        vehicleEntity.setModel(vehicleRequest.getModel());
 
         vehicleRepository.save(vehicleEntity);
 
@@ -95,7 +100,7 @@ public class VehicleController {
             value = "/garages//vehicles", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void submitVehicleWithMissingGarage() {
-        throw new ResourcesNotFoundException("GarageId is required");
+        throw new ResourcesNotFoundException("Garage is required");
     }
 
     @RequestMapping(
