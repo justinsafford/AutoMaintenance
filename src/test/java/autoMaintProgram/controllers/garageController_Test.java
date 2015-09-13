@@ -85,17 +85,14 @@ public class garageController_Test {
     }
 
     @Test
-    public void deleteGarageWithUnknownId_throwsResourceNotFound() throws Exception {
+    public void deleteGarageWithUnknownId_throwsRNFException() throws Exception {
         when(garageRepository.findOne("unknownId")).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Garage not found");
 
         mockMvc.perform(delete("/garages/{id}", "unknownId")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isOk())
-                .andReturn();
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }
+

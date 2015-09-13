@@ -88,7 +88,7 @@ public class vehicleController_Test {
     }
 
     @Test
-    public void retrieveVehicleWithMismatchingIds_throwsNotFoundException() throws Exception {
+    public void retrieveVehicleWithMismatchingIds_throwsRNFException() throws Exception {
         GarageEntity garageEntity = new GarageEntity();
         when(garageRepository.findOne("gId")).thenReturn(garageEntity);
 
@@ -120,7 +120,7 @@ public class vehicleController_Test {
     }
 
     @Test
-    public void retrieveMultipleVehiclesWithNoVehiclesInGarage_ReturnNotFound() throws Exception {
+    public void retrieveMultipleVehiclesWithNoVehiclesInGarage_throwsRNFException() throws Exception {
         when(vehicleRepository.findAllByGarageId("gId")).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
@@ -138,15 +138,11 @@ public class vehicleController_Test {
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Garage is required");
 
-        mockMvc.perform(get("/garages//vehicles")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/garages//vehicles"));
     }
 
     @Test
-    public void addNewVehicleWithUnknownGarage_ReturnNotFound() throws Exception {
+    public void addNewVehicleWithUnknownGarage_throwsRNFException() throws Exception {
         GarageEntity garageEntity = new GarageEntity();
         when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
 
@@ -161,15 +157,11 @@ public class vehicleController_Test {
     }
 
     @Test
-    public void addNewVehicleWithMissingGarage_ReturnNotFound() throws Exception {
+    public void addNewVehicleWithMissingGarage_throwsRNFException() throws Exception {
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Garage is required");
 
-        mockMvc.perform(post("/garages//vehicles")
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andReturn();
+        mockMvc.perform(post("/garages//vehicles"));
     }
 
     @Test
@@ -191,7 +183,7 @@ public class vehicleController_Test {
     }
 
     @Test
-    public void deleteGarageWithUnknownVehicleId_ReturnNotFound() throws Exception {
+    public void deleteGarageWithUnknownVehicleId_throwsRNFException() throws Exception {
         when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
                 .thenReturn(null);
 
@@ -205,5 +197,4 @@ public class vehicleController_Test {
                 .andExpect(status().isOk())
                 .andReturn();
     }
-
 }
