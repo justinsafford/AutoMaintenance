@@ -1,5 +1,10 @@
 package autoMaintProgram;
 
+import autoMaintProgram.garage.GarageEntity;
+import autoMaintProgram.repos.GarageRepository;
+import autoMaintProgram.repos.VehicleRepository;
+import autoMaintProgram.vehicle.VehicleController;
+import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -145,7 +150,7 @@ public class vehicleControllerTest {
         when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
-        expectedException.expectMessage("GarageId not found");
+        expectedException.expectMessage("Garage not found");
 
         mockMvc.perform(post("/garages/{garageId}/vehicles", "id")
                 .content("{}")
@@ -157,7 +162,7 @@ public class vehicleControllerTest {
     @Test
     public void addNewVehicleWithMissingGarage_ReturnNotFound() throws Exception {
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
-        expectedException.expectMessage("GarageId is required");
+        expectedException.expectMessage("Garage is required");
 
         mockMvc.perform(post("/garages//vehicles")
                 .content("{}")

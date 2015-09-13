@@ -1,6 +1,10 @@
-package autoMaintProgram.integrationTests;
+package autoMaintProgram.integration.vehicle;
 
 import autoMaintProgram.*;
+import autoMaintProgram.garage.GarageEntity;
+import autoMaintProgram.repos.GarageRepository;
+import autoMaintProgram.repos.VehicleRepository;
+import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,18 +75,18 @@ public class retrieveVehiclesTest {
         String vehicleUuid = UUID.randomUUID().toString();
         vehicleEntity.setVehicleId(vehicleUuid);
         vehicleEntity.setGarageId(garageUuid);
-        vehicleEntity.setVehicleYear("2004");
-        vehicleEntity.setVehicleMake("Chevy");
-        vehicleEntity.setVehicleModel("Silverado");
-        vehicleEntity.setVehicleName("Taylor");
+        vehicleEntity.setYear("2004");
+        vehicleEntity.setMake("Chevy");
+        vehicleEntity.setModel("Silverado");
+        vehicleEntity.setName("Taylor");
 
         VehicleEntity vehicleEntity2 = new VehicleEntity();
         vehicleEntity2.setGarageId(UUID.randomUUID().toString());
         vehicleEntity2.setVehicleId(UUID.randomUUID().toString());
-        vehicleEntity2.setVehicleYear("sfas");
-        vehicleEntity2.setVehicleMake("asdfas");
-        vehicleEntity2.setVehicleModel("sdafas");
-        vehicleEntity2.setVehicleName("sdga");
+        vehicleEntity2.setYear("sfas");
+        vehicleEntity2.setMake("asdfas");
+        vehicleEntity2.setModel("sdafas");
+        vehicleEntity2.setName("sdga");
 
         vehicleRepository.save(vehicleEntity);
         vehicleRepository.save(vehicleEntity2);
@@ -90,10 +94,10 @@ public class retrieveVehiclesTest {
         mockMvc.perform(get("/garages/{garageId}/vehicles/{vehicleId}", garageUuid, vehicleUuid))
                 .andExpect(jsonPath("$.garageId", is(garageUuid)))
                 .andExpect(jsonPath("$.vehicleId", is(vehicleUuid)))
-                .andExpect(jsonPath("$.vehicleYear", is("2004")))
-                .andExpect(jsonPath("$.vehicleMake", is("Chevy")))
-                .andExpect(jsonPath("$.vehicleModel", is("Silverado")))
-                .andExpect(jsonPath("$.vehicleName", is("Taylor")))
+                .andExpect(jsonPath("$.year", is("2004")))
+                .andExpect(jsonPath("$.make", is("Chevy")))
+                .andExpect(jsonPath("$.model", is("Silverado")))
+                .andExpect(jsonPath("$.name", is("Taylor")))
                 .andExpect(status().isOk());
 
         assertThat(garageRepository.count(), is(1L));
@@ -112,18 +116,18 @@ public class retrieveVehiclesTest {
         vehicleEntity.setGarageId(UUID.randomUUID().toString());
         vehicleEntity.setGarageId("gId");
         vehicleEntity.setVehicleId("vId1");
-        vehicleEntity.setVehicleYear("2004");
-        vehicleEntity.setVehicleMake("Chevy");
-        vehicleEntity.setVehicleModel("Silverado");
-        vehicleEntity.setVehicleName("Taylor");
+        vehicleEntity.setYear("2004");
+        vehicleEntity.setMake("Chevy");
+        vehicleEntity.setModel("Silverado");
+        vehicleEntity.setName("Taylor");
 
         VehicleEntity vehicleEntity2 = new VehicleEntity();
         vehicleEntity2.setGarageId("gId");
         vehicleEntity2.setVehicleId("vId2");
-        vehicleEntity2.setVehicleYear("2014");
-        vehicleEntity2.setVehicleMake("Chevy");
-        vehicleEntity2.setVehicleModel("Silverado");
-        vehicleEntity2.setVehicleName("Tito");
+        vehicleEntity2.setYear("2014");
+        vehicleEntity2.setMake("Chevy");
+        vehicleEntity2.setModel("Silverado");
+        vehicleEntity2.setName("Tito");
 
         vehicleRepository.save(vehicleEntity);
         vehicleRepository.save(vehicleEntity2);

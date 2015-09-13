@@ -1,4 +1,4 @@
-package autoMaintProgram;
+package autoMaintProgram.garage;
 
 import org.springframework.data.annotation.Id;
 

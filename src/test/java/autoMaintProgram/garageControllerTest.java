@@ -1,5 +1,8 @@
 package autoMaintProgram;
 
+import autoMaintProgram.garage.GarageController;
+import autoMaintProgram.garage.GarageEntity;
+import autoMaintProgram.repos.GarageRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,7 +59,7 @@ public class garageControllerTest {
                 .content("{}"))
                 .andExpect(status().isCreated());
 
-        verify(garageRepository, times(1)).save((GarageEntity) Matchers.isA(GarageEntity.class));
+        verify(garageRepository, times(1)).save(Matchers.isA(GarageEntity.class));
         verifyNoMoreInteractions(garageRepository);
     }
 
