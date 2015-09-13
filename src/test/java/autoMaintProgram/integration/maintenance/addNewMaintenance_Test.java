@@ -1,8 +1,8 @@
-package autoMaintProgram.integration.garage;
+package autoMaintProgram.integration.maintenance;
 
-import autoMaintProgram.AccidentEntity;
-import autoMaintProgram.AccidentRepository;
 import autoMaintProgram.Application;
+import autoMaintProgram.maintenance.MaintenanceEntity;
+import autoMaintProgram.repos.MaintenanceRepository;
 import autoMaintProgram.repos.VehicleRepository;
 import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
@@ -30,13 +30,13 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class addNewAccident_Test {
+public class addNewMaintenance_Test {
 
     @Autowired
     VehicleRepository vehicleRepository;
 
     @Autowired
-    AccidentRepository accidentRepository;
+    MaintenanceRepository maintenanceRepository;
 
     @Autowired
     WebApplicationContext webApplicationContext;
@@ -54,28 +54,29 @@ public class addNewAccident_Test {
 
     @Before
     public void clearDb() {
-        accidentRepository.deleteAll();
+        vehicleRepository.deleteAll();
+        maintenanceRepository.deleteAll();
     }
 
     @Test
     public void addNewGarage() throws Exception {
-        ClassPathResource classPathResource = new ClassPathResource("requests/addAccident.json");
+        ClassPathResource classPathResource = new ClassPathResource("requests/addMaintenance.json");
         String request = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
 
         VehicleEntity vehicleEntity = new VehicleEntity();
         vehicleEntity.setVehicleId("vId");
         vehicleRepository.save(vehicleEntity);
 
-        mockMvc.perform(post("/vehicles/{vehicleId}/accidents", "vId")
+        mockMvc.perform(post("/vehicles/{vehicleId}/maintenance", "vId")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.type", is("Fender Bender")))
-                .andExpect(jsonPath("$.description", is("Someone opened door into front passenger")))
-                .andExpect(jsonPath("$.damageLevel", is("Low")))
+                .andExpect(jsonPath("$.type", is("Change Oil")))
+                .andExpect(jsonPath("$.description", is("Change oil interval")))
+                .andExpect(jsonPath("$.mileageExpected", is("50,000")))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        List<AccidentEntity> accidentEntityList = accidentRepository.findAll();
-        assertThat(accidentEntityList.size(), is(1));
+        List<MaintenanceEntity> maintenanceEntityList = maintenanceRepository.findAll();
+        assertThat(maintenanceEntityList.size(), is(1));
     }
 }

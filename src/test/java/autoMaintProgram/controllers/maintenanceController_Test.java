@@ -1,9 +1,9 @@
 package autoMaintProgram.controllers;
 
-import autoMaintProgram.accident.AccidentController;
-import autoMaintProgram.accident.AccidentEntity;
-import autoMaintProgram.repos.AccidentRepository;
 import autoMaintProgram.ResourcesNotFoundException;
+import autoMaintProgram.maintenance.MaintenanceController;
+import autoMaintProgram.maintenance.MaintenanceEntity;
+import autoMaintProgram.repos.MaintenanceRepository;
 import autoMaintProgram.repos.VehicleRepository;
 import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
@@ -25,68 +25,68 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-public class accidentController_Test {
+public class maintenanceController_Test {
 
     @Mock
-    AccidentRepository accidentRepository;
+    VehicleRepository vehicleRepository;
 
     @Mock
-    private VehicleRepository vehicleRepository;
+    MaintenanceRepository maintenanceRepository;
 
     @InjectMocks
-    AccidentController accidentController;
+    MaintenanceController maintenanceController;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
+
     MockMvc mockMvc;
 
     @Before
     public void setupMock() {
-        mockMvc = standaloneSetup(accidentController)
+        mockMvc = standaloneSetup(maintenanceController)
                 .build();
     }
 
     @Test
-    public void addAccident() throws Exception {
+    public void addMaintenance() throws Exception {
         VehicleEntity vehicleEntity = new VehicleEntity();
         when(vehicleRepository.findOne("vId")).thenReturn(vehicleEntity);
 
-        AccidentEntity expectedAccident = new AccidentEntity();
-        when(accidentRepository.save(any(AccidentEntity.class))).thenReturn(expectedAccident);
+        MaintenanceEntity expectedMaintenance = new MaintenanceEntity();
+        when(maintenanceRepository.save(any(MaintenanceEntity.class))).thenReturn(expectedMaintenance);
 
-        mockMvc.perform(post("/vehicles/{vehicleId}/accidents", "vId")
+        mockMvc.perform(post("/vehicles/{vehicleId}/maintenance", "vId")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isCreated());
 
         verify(vehicleRepository, times(1)).findOne("vId");
-        verify(accidentRepository, times(1)).save(Matchers.isA(AccidentEntity.class));
-        verifyNoMoreInteractions(accidentRepository, vehicleRepository);
+        verify(maintenanceRepository, times(1)).save(Matchers.isA(MaintenanceEntity.class));
+        verifyNoMoreInteractions(maintenanceRepository, vehicleRepository);
     }
 
     @Test
-    public void addAccidentWithUnknownVehicleId_throwsRNFException() throws Exception {
+    public void addMaintenanceWithUnknownVehicleId_throwsRNFException() throws Exception {
         when(vehicleRepository.findOne("unknownVId")).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Vehicle not found");
 
-        mockMvc.perform(post("/vehicles/{vehicleId}/accidents", "unknownVId")
+        mockMvc.perform(post("/vehicles/{vehicleId}/maintenance", "unknownVId")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isCreated());
+                .content("{}"));
     }
 
     @Test
-    public void addAccidentWithMissingVehicleId_throwsRNFException() throws Exception {
+    public void addMaintenanceWithMissingVehicleId_throwsRNFException() throws Exception {
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Vehicle not found");
 
-        mockMvc.perform(post("/vehicles//accidents"));
+        mockMvc.perform(post("/vehicles//maintenance"));
     }
 }
