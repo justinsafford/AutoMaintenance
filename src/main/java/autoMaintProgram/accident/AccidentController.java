@@ -30,6 +30,7 @@ public class AccidentController {
         if (vehicleRepository.findOne(vehicleId) == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
+        accidentEntity.setVehicleId(vehicleId);
         accidentRepository.save(accidentEntity);
 
         return accidentEntity;

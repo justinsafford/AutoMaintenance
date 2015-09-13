@@ -70,6 +70,7 @@ public class addNewMaintenance_Test {
         mockMvc.perform(post("/vehicles/{vehicleId}/maintenance", "vId")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.vehicleId", is("vId")))
                 .andExpect(jsonPath("$.type", is("Change Oil")))
                 .andExpect(jsonPath("$.description", is("Change oil interval")))
                 .andExpect(jsonPath("$.mileageExpected", is("50,000")))

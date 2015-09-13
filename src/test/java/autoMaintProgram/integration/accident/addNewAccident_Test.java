@@ -70,6 +70,7 @@ public class addNewAccident_Test {
         mockMvc.perform(post("/vehicles/{vehicleId}/accidents", "vId")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.vehicleId", is("vId")))
                 .andExpect(jsonPath("$.type", is("Fender Bender")))
                 .andExpect(jsonPath("$.description", is("Someone opened door into front passenger")))
                 .andExpect(jsonPath("$.damageLevel", is("Low")))

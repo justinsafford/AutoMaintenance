@@ -7,6 +7,7 @@ public class MaintenanceEntity {
     @Id
     private String id;
 
+    private String vehicleId;
     private String type;
     private String description;
     private String mileageExpected;
@@ -35,4 +36,11 @@ public class MaintenanceEntity {
         this.mileageExpected = mileageExpected;
     }
 
+    public String getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(String vehicleId) {
+        this.vehicleId = vehicleId;
+    }
 }

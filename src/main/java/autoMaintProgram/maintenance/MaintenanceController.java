@@ -30,6 +30,7 @@ public class MaintenanceController {
         if (vehicleRepository.findOne(vehicleId) == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
+        maintenanceEntity.setVehicleId(vehicleId);
         maintenanceRepository.save(maintenanceEntity);
 
         return maintenanceEntity;
