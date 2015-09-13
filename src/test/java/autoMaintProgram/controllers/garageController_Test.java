@@ -1,5 +1,6 @@
-package autoMaintProgram;
+package autoMaintProgram.controllers;
 
+import autoMaintProgram.ResourcesNotFoundException;
 import autoMaintProgram.garage.GarageController;
 import autoMaintProgram.garage.GarageEntity;
 import autoMaintProgram.repos.GarageRepository;
@@ -15,17 +16,13 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
-
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-public class garageControllerTest {
+public class garageController_Test {
 
     @Mock
     private GarageRepository garageRepository;
@@ -49,10 +46,6 @@ public class garageControllerTest {
 
     @Test
     public void addNewGarage() throws Exception {
-        GarageEntity garageEntity = new GarageEntity();
-        garageEntity.setGarageId(UUID.randomUUID().toString());
-        garageEntity.setGarageName("Justin");
-
         mockMvc.perform(post("/garages")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,17 +85,14 @@ public class garageControllerTest {
     }
 
     @Test
-    public void deleteGarageWithUnknownId_throwsResourceNotFound() throws Exception {
+    public void deleteGarageWithUnknownId_throwsRNFException() throws Exception {
         when(garageRepository.findOne("unknownId")).thenReturn(null);
 
         expectedException.expectCause(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Garage not found");
 
         mockMvc.perform(delete("/garages/{id}", "unknownId")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isOk())
-                .andReturn();
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }
+

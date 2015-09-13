@@ -1,8 +1,10 @@
 package autoMaintProgram.integration.garage;
 
+import autoMaintProgram.AccidentEntity;
+import autoMaintProgram.AccidentRepository;
 import autoMaintProgram.Application;
-import autoMaintProgram.garage.GarageEntity;
-import autoMaintProgram.repos.GarageRepository;
+import autoMaintProgram.repos.VehicleRepository;
+import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,22 +21,22 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.isA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class addNewGarageTest {
+public class addNewAccident_Test {
 
     @Autowired
-    GarageRepository garageRepository;
+    VehicleRepository vehicleRepository;
+
+    @Autowired
+    AccidentRepository accidentRepository;
 
     @Autowired
     WebApplicationContext webApplicationContext;
@@ -44,7 +46,7 @@ public class addNewGarageTest {
     @Before
     public void setupMock() {
         mockMvc = webAppContextSetup(webApplicationContext)
-                .defaultRequest(get("/")
+                .defaultRequest(post("/")
                         .accept(MediaType.APPLICATION_JSON))
                 .alwaysExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .build();
@@ -52,27 +54,28 @@ public class addNewGarageTest {
 
     @Before
     public void clearDb() {
-        garageRepository.deleteAll();
+        accidentRepository.deleteAll();
     }
 
     @Test
     public void addNewGarage() throws Exception {
-        ClassPathResource classPathResource = new ClassPathResource("requests/addGarage.json");
+        ClassPathResource classPathResource = new ClassPathResource("requests/addAccident.json");
         String request = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
 
-        mockMvc.perform(post("/garages")
+        VehicleEntity vehicleEntity = new VehicleEntity();
+        vehicleEntity.setVehicleId("vId");
+        vehicleRepository.save(vehicleEntity);
+
+        mockMvc.perform(post("/vehicles/{vehicleId}/accidents", "vId")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.type", is("Fender Bender")))
+                .andExpect(jsonPath("$.description", is("Someone opened door into front passenger")))
+                .andExpect(jsonPath("$.damageLevel", is("Low")))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-
-        List<GarageEntity> garageEntityList = garageRepository.findAll();
-        assertThat(garageEntityList.size(), is(1));
-        GarageEntity savedGarage = garageEntityList.get(0);
-
-        assertThat(savedGarage.getGarageName(), is("Justin"));
-        assertThat(savedGarage.getGarageId(), isA(String.class));
-
+        List<AccidentEntity> accidentEntityList = accidentRepository.findAll();
+        assertThat(accidentEntityList.size(), is(1));
     }
 }
