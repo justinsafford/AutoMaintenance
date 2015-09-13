@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class retrieveVehiclesTest {
+public class retrieveVehicles_Test {
 
     @Autowired
     GarageRepository garageRepository;

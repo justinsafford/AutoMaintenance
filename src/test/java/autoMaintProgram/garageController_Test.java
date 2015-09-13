@@ -15,17 +15,13 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
-
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-public class garageControllerTest {
+public class garageController_Test {
 
     @Mock
     private GarageRepository garageRepository;
@@ -49,10 +45,6 @@ public class garageControllerTest {
 
     @Test
     public void addNewGarage() throws Exception {
-        GarageEntity garageEntity = new GarageEntity();
-        garageEntity.setGarageId(UUID.randomUUID().toString());
-        garageEntity.setGarageName("Justin");
-
         mockMvc.perform(post("/garages")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)

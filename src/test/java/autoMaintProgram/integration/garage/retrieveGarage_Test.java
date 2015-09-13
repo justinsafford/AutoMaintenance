@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class deleteGarageTest {
+public class retrieveGarage_Test {
 
     @Autowired
     GarageRepository garageRepository;
@@ -61,10 +61,17 @@ public class deleteGarageTest {
 
         garageRepository.save(expectedGarage);
 
+        GarageEntity actualGarage;
+        actualGarage = garageController.retrieveGarage(garageUuid);
+
         assertThat(garageRepository.count(), is(1L));
-
-        garageController.deleteGarage(garageUuid);
-
-        assertThat(garageRepository.count(), is(0L));
+        assertThat(actualGarage.getGarageId(), is(garageUuid));
+        assertThat(actualGarage.getGarageName(), is("Justin"));
+        //        ClassPathResource classPathResource = new ClassPathResource("responses/retrieveGarage.json");
+        //        String expectedJson = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
+        //TODO:Get this test working - content type not set error..
+//        mockMvc.perform(get("/garages/{id}", garageUuid))
+//                .andExpect(content().json(expectedJson))
+//                .andExpect(status().isOk());
     }
 }
