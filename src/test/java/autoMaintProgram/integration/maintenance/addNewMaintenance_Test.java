@@ -1,4 +1,4 @@
-package autoMaintProgram.integration;
+package autoMaintProgram.integration.maintenance;
 
 import autoMaintProgram.Application;
 import autoMaintProgram.maintenance.MaintenanceEntity;
