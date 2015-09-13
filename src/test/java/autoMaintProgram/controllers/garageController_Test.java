@@ -1,5 +1,6 @@
-package autoMaintProgram;
+package autoMaintProgram.controllers;
 
+import autoMaintProgram.ResourcesNotFoundException;
 import autoMaintProgram.garage.GarageController;
 import autoMaintProgram.garage.GarageEntity;
 import autoMaintProgram.repos.GarageRepository;

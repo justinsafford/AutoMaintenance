@@ -1,5 +1,9 @@
-package autoMaintProgram;
+package autoMaintProgram.controllers;
 
+import autoMaintProgram.AccidentController;
+import autoMaintProgram.AccidentEntity;
+import autoMaintProgram.AccidentRepository;
+import autoMaintProgram.ResourcesNotFoundException;
 import autoMaintProgram.repos.VehicleRepository;
 import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
@@ -61,7 +65,7 @@ public class accidentController_Test {
 
         verify(vehicleRepository, times(1)).findOne("vId");
         verify(accidentRepository, times(1)).save(Matchers.isA(AccidentEntity.class));
-        verifyNoMoreInteractions(accidentRepository,vehicleRepository);
+        verifyNoMoreInteractions(accidentRepository, vehicleRepository);
     }
 
     @Test
@@ -76,5 +80,13 @@ public class accidentController_Test {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void addAccidentWithMissingVehicleId_throwsRNFException() throws Exception {
+        expectedException.expectCause(isA(ResourcesNotFoundException.class));
+        expectedException.expectMessage("Vehicle not found");
+
+        mockMvc.perform(post("/vehicles//accidents"));
     }
 }

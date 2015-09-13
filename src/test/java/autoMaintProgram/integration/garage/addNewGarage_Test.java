@@ -66,13 +66,11 @@ public class addNewGarage_Test {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-
         List<GarageEntity> garageEntityList = garageRepository.findAll();
         assertThat(garageEntityList.size(), is(1));
         GarageEntity savedGarage = garageEntityList.get(0);
 
         assertThat(savedGarage.getGarageName(), is("Justin"));
         assertThat(savedGarage.getGarageId(), isA(String.class));
-
     }
 }

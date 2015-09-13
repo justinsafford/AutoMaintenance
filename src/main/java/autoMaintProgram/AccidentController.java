@@ -33,4 +33,9 @@ public class AccidentController {
         return accidentEntity;
     }
 
+    @RequestMapping(value = "/vehicles//accidents", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void addNewAccidentMissingVehicleId() {
+        throw new ResourcesNotFoundException("Vehicle not found");
+    }
 }
