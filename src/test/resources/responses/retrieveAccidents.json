@@ -1,0 +1,14 @@
+[
+  {
+    "vehicleId":"vId",
+    "type":"type1",
+    "description":"description1",
+    "damageLevel":"damage1"
+  },
+  {
+    "vehicleId":"vId",
+    "type":"type2",
+    "description":"description2",
+    "damageLevel":"damage2"
+  }
+]
