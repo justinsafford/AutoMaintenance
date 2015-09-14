@@ -9,13 +9,15 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TrackerController {
-
-    @Autowired
+public class    TrackerController {
     VehicleRepository vehicleRepository;
+    TrackerRepository trackerRepository;
 
     @Autowired
-    TrackerRepository trackerRepository;
+    public TrackerController(VehicleRepository vehicleRepository, TrackerRepository trackerRepository) {
+        this.vehicleRepository = vehicleRepository;
+        this.trackerRepository = trackerRepository;
+    }
 
     @RequestMapping(
             value = "/vehicles/{vehicleId}/tracker",
