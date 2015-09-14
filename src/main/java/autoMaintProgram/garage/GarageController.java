@@ -55,6 +55,5 @@ public class GarageController {
             throw new ResourcesNotFoundException("Garage not found");
         }
         garageRepository.delete(garageId);
-
     }
 }
