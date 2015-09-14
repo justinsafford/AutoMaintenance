@@ -1,4 +1,4 @@
-package autoMaintProgram;
+package autoMaintProgram.tracker;
 
 import org.springframework.data.annotation.Id;
 

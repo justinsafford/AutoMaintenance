@@ -1,8 +1,8 @@
-package autoMaintProgram.integration;
+package autoMaintProgram.integration.tracker;
 
 import autoMaintProgram.Application;
-import autoMaintProgram.TrackerEntity;
-import autoMaintProgram.TrackerRepository;
+import autoMaintProgram.tracker.TrackerEntity;
+import autoMaintProgram.repos.TrackerRepository;
 import autoMaintProgram.repos.VehicleRepository;
 import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;

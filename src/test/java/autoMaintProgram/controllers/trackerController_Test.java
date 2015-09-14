@@ -1,9 +1,9 @@
 package autoMaintProgram.controllers;
 
 import autoMaintProgram.ResourcesNotFoundException;
-import autoMaintProgram.TrackerController;
-import autoMaintProgram.TrackerEntity;
-import autoMaintProgram.TrackerRepository;
+import autoMaintProgram.tracker.TrackerController;
+import autoMaintProgram.tracker.TrackerEntity;
+import autoMaintProgram.repos.TrackerRepository;
 import autoMaintProgram.repos.VehicleRepository;
 import autoMaintProgram.vehicle.VehicleEntity;
 import org.junit.Before;
