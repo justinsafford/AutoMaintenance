@@ -75,7 +75,7 @@ public class VehicleController {
     public List<VehicleEntity> findAllVehiclesInGarage(@PathVariable String garageId) {
 
         List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);
-        //TODO:Check this logic..
+        //TODO:Check this logic.. Should check for vehicle existence first
         if (vehicleEntityList == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }

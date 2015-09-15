@@ -1,4 +1,4 @@
-package autoMaintProgram.controllers;
+package autoMaintProgram.controllers.accident;
 
 import autoMaintProgram.accident.AccidentController;
 import autoMaintProgram.accident.AccidentEntity;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-public class accidentController_Test {
+public class addAccidentController_Test {
 
     @Mock
     AccidentRepository accidentRepository;
