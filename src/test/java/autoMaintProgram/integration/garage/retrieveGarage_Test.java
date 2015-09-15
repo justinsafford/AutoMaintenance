@@ -17,10 +17,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -61,17 +60,10 @@ public class retrieveGarage_Test {
 
         garageRepository.save(expectedGarage);
 
-        GarageEntity actualGarage;
-        actualGarage = garageController.retrieveGarage(garageUuid);
-
-        assertThat(garageRepository.count(), is(1L));
-        assertThat(actualGarage.getGarageId(), is(garageUuid));
-        assertThat(actualGarage.getGarageName(), is("Justin"));
-        //        ClassPathResource classPathResource = new ClassPathResource("responses/retrieveGarage.json");
-        //        String expectedJson = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
-        //TODO:Get this test working - content type not set error..
-//        mockMvc.perform(get("/garages/{id}", garageUuid))
-//                .andExpect(content().json(expectedJson))
-//                .andExpect(status().isOk());
+        mockMvc.perform(get("/garages/{id}", garageUuid)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.garageId", is(garageUuid)))
+                .andExpect(jsonPath("$.garageName", is("Justin")))
+                .andExpect(status().isOk());
     }
 }
