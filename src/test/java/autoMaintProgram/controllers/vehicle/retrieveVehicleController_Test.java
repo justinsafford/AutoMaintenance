@@ -67,7 +67,7 @@ public class retrieveVehicleController_Test {
 
     @Test
     public void retrieveMultipleVehiclesFromGarage() throws Exception {
-        List<VehicleEntity> vehicleEntityList = new ArrayList<>();
+        List<VehicleEntity> vehicleEntityList = new ArrayList();
         when(vehicleRepository.findAllByGarageId("gId")).thenReturn(vehicleEntityList);
 
         mockMvc.perform(get("/garages/{garageId}/vehicles", "gId")

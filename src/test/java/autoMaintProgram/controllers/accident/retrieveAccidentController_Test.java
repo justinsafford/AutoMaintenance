@@ -51,7 +51,7 @@ public class retrieveAccidentController_Test {
 
     @Test
     public void retrieveAllAccidentsByVehicleId() throws Exception {
-        List<AccidentEntity> accidentEntityList = new ArrayList<>();
+        List<AccidentEntity> accidentEntityList = new ArrayList();
         when(accidentRepository.findAllByVehicleId("vId")).thenReturn(accidentEntityList);
 
         mockMvc.perform(get("/vehicles/{vehicleId}/accidents", "vId")
