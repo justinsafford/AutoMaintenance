@@ -22,7 +22,7 @@ targetCompatibility = 1.8
 
 repositories {
 
-     maven { url "http://repo.maven.apache.org/maven2" }
+     mavenCentral()
 }
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version:'1.2.5.RELEASE'
@@ -32,4 +32,8 @@ exclude(module: 'commons-logging')
     }
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version:'0.9.1'
     testCompile group: 'org.skyscreamer', name: 'jsonassert', version:'1.2.3'
+}
+
+task wrapper (type: Wrapper) {
+    gradleVersion = '2.6'
 }
