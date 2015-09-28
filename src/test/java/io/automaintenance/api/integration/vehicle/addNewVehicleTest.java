@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class addNewVehicleTest {
+public class AddNewVehicleTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
