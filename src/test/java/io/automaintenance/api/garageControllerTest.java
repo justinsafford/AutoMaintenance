@@ -1,5 +1,6 @@
 package io.automaintenance.api;
 
+import io.automaintenance.api.ResourcesNotFoundException;
 import io.automaintenance.api.garage.GarageController;
 import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;

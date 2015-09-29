@@ -97,6 +97,33 @@ public class VehicleController {
     }
 
     @RequestMapping(
+            value = "/garages/{garageId}/vehicles/{vehicleId}",
+            method = RequestMethod.PUT
+    )
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public VehicleEntity editVehicle(@PathVariable String garageId,
+                                     @PathVariable String vehicleId,
+                                     @RequestBody VehicleRequest request){
+
+        VehicleEntity vehicleEntity =
+                vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
+        if (vehicleEntity == null) {
+            throw new ResourcesNotFoundException("Vehicle not found");
+        }
+
+        VehicleEntity entity = new VehicleEntity();
+        entity.setGarageId(garageId);
+        entity.setVehicleId(vehicleId);
+        entity.setMake(request.getMake());
+        entity.setModel(request.getModel());
+        entity.setName(request.getName());
+        entity.setYear(request.getYear());
+
+        vehicleRepository.save(entity);
+        return entity;
+    }
+
+    @RequestMapping(
             value = "/garages//vehicles", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void submitVehicleWithMissingGarage() {
