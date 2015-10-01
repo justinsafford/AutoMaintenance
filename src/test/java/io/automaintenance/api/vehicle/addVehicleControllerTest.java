@@ -29,6 +29,9 @@ public class AddVehicleControllerTest {
     @Mock
     GarageRepository garageRepository;
 
+    @Mock
+    VehicleResponseMapper vehicleResponseMapper;
+
     @InjectMocks
     VehicleController vehicleController;
 
@@ -52,9 +55,16 @@ public class AddVehicleControllerTest {
         garageEntity.setGarageId("id");
         garageEntity.setGarageName("testName");
 
+
         GarageEntity expectedGarageEntity = new GarageEntity();
         when(garageRepository.findOne(garageEntity.getGarageId()))
                 .thenReturn(expectedGarageEntity);
+
+        VehicleRequest vehicleRequest = new VehicleRequest();
+        VehicleEntity vehicleEntity = new VehicleEntity();
+        String garageId = "garageId";
+        String vehicleId = "vehicleId";
+        when(vehicleResponseMapper.map(any(VehicleRequest.class), anyString(), anyString())).thenReturn(vehicleEntity);
 
         mockMvc.perform(post("/garages/{garageId}/vehicles", garageEntity.getGarageId())
                 .accept(MediaType.APPLICATION_JSON)
