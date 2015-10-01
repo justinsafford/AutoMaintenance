@@ -68,10 +68,8 @@ public class VehicleController {
     @RequestMapping(
             value = "/garages/{garageId}/vehicles",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-
     public List<VehicleEntity> findAllVehiclesInGarage(@PathVariable String garageId) {
 
         List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);

@@ -1,7 +1,6 @@
 package io.automaintenance.api.integration.garage;
 
 import io.automaintenance.api.Application;
-import io.automaintenance.api.garage.GarageController;
 import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
 import org.junit.Before;
@@ -32,9 +31,6 @@ public class RetrieveGarageTest {
 
     @Autowired
     WebApplicationContext webApplicationContext;
-
-    @Autowired
-    GarageController garageController;
 
     MockMvc mockMvc;
 

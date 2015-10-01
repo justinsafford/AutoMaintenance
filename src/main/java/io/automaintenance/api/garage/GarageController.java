@@ -20,16 +20,6 @@ public class GarageController {
     }
 
     @RequestMapping(
-            value = "/garages/{garageId}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @ResponseStatus(HttpStatus.OK)
-    public GarageEntity retrieveGarage(@PathVariable String garageId) {
-        return garageRepository.findOne(garageId);
-    }
-
-    @RequestMapping(
             value = "/garages",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE
@@ -45,13 +35,24 @@ public class GarageController {
 
     @RequestMapping(
             value = "/garages/{garageId}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public GarageEntity retrieveGarage(@PathVariable String garageId) {
+        return garageRepository.findOne(garageId);
+    }
+
+
+    @RequestMapping(
+            value = "/garages/{garageId}",
             method = RequestMethod.DELETE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.OK)
     public void deleteGarage(@PathVariable String garageId) {
 
-        if(garageRepository.findOne(garageId) == null) {
+        if (garageRepository.findOne(garageId) == null) {
             throw new ResourcesNotFoundException("Garage not found");
         }
         garageRepository.delete(garageId);
