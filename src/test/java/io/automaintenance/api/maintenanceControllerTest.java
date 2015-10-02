@@ -1,6 +1,5 @@
 package io.automaintenance.api;
 
-import io.automaintenance.api.ResourcesNotFoundException;
 import io.automaintenance.api.maintenance.MaintenanceController;
 import io.automaintenance.api.maintenance.MaintenanceEntity;
 import io.automaintenance.api.repos.MaintenanceRepository;

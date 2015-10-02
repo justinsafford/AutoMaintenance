@@ -1,6 +1,5 @@
 package io.automaintenance.api;
 
-import io.automaintenance.api.ResourcesNotFoundException;
 import io.automaintenance.api.tracker.TrackerController;
 import io.automaintenance.api.tracker.TrackerEntity;
 import io.automaintenance.api.repos.TrackerRepository;
