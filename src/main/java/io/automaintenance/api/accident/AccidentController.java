@@ -38,12 +38,6 @@ public class AccidentController {
         return accidentEntity;
     }
 
-    @RequestMapping(value = "/vehicles//accidents", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void addNewAccidentMissingVehicleId() {
-        throw new ResourcesNotFoundException("Vehicle not found");
-    }
-
     @RequestMapping(
             value = "/vehicles/{vehicleId}/accidents",
             method = RequestMethod.GET,
@@ -61,10 +55,15 @@ public class AccidentController {
         return accidentEntityList;
     }
 
+    @RequestMapping(value = "/vehicles//accidents", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void addNewAccidentMissingVehicleId() {
+        throw new ResourcesNotFoundException("Vehicle not found");
+    }
+
     @RequestMapping(value = "/vehicles//accidents", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void retrieveAccidentsWithMissingVehicleId() {
         throw new ResourcesNotFoundException("Vehicle is required");
     }
-
 }

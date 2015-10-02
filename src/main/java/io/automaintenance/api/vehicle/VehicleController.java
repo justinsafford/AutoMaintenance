@@ -15,11 +15,13 @@ import java.util.UUID;
 public class VehicleController {
     GarageRepository garageRepository;
     VehicleRepository vehicleRepository;
+    VehicleResponseMapper vehicleResponseMapper;
 
     @Autowired
-    public VehicleController(GarageRepository garageRepository, VehicleRepository vehicleRepository) {
+    public VehicleController(GarageRepository garageRepository, VehicleRepository vehicleRepository, VehicleResponseMapper vehicleResponseMapper) {
         this.garageRepository = garageRepository;
         this.vehicleRepository = vehicleRepository;
+        this.vehicleResponseMapper = vehicleResponseMapper;
     }
 
     @RequestMapping(
@@ -35,17 +37,14 @@ public class VehicleController {
             throw new ResourcesNotFoundException("Garage not found");
         }
 
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        vehicleEntity.setVehicleId(UUID.randomUUID().toString());
-        vehicleEntity.setGarageId(garageId);
-        vehicleEntity.setName(vehicleRequest.getName());
-        vehicleEntity.setYear(vehicleRequest.getYear());
-        vehicleEntity.setMake(vehicleRequest.getMake());
-        vehicleEntity.setModel(vehicleRequest.getModel());
+        String vehicleId = UUID.randomUUID().toString();
 
-        vehicleRepository.save(vehicleEntity);
+        VehicleEntity vehicleEntityResponse =
+                vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
 
-        return vehicleEntity;
+        vehicleRepository.save(vehicleEntityResponse);
+
+        return vehicleEntityResponse;
     }
 
     @RequestMapping(
@@ -68,10 +67,8 @@ public class VehicleController {
     @RequestMapping(
             value = "/garages/{garageId}/vehicles",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-
     public List<VehicleEntity> findAllVehiclesInGarage(@PathVariable String garageId) {
 
         List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);
@@ -103,7 +100,7 @@ public class VehicleController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public VehicleEntity editVehicle(@PathVariable String garageId,
                                      @PathVariable String vehicleId,
-                                     @RequestBody VehicleRequest request){
+                                     @RequestBody VehicleRequest vehicleRequest){
 
         VehicleEntity vehicleEntity =
                 vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
@@ -111,16 +108,11 @@ public class VehicleController {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
 
-        VehicleEntity entity = new VehicleEntity();
-        entity.setGarageId(garageId);
-        entity.setVehicleId(vehicleId);
-        entity.setMake(request.getMake());
-        entity.setModel(request.getModel());
-        entity.setName(request.getName());
-        entity.setYear(request.getYear());
+        VehicleEntity vehicleResponseEntity =
+                vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
 
-        vehicleRepository.save(entity);
-        return entity;
+        vehicleRepository.save(vehicleResponseEntity);
+        return vehicleResponseEntity;
     }
 
     @RequestMapping(

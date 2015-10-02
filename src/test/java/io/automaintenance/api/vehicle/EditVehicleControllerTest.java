@@ -28,6 +28,9 @@ public class EditVehicleControllerTest {
     @Mock
     GarageRepository garageRepository;
 
+    @Mock
+    private VehicleResponseMapper vehicleResponseMapper;
+
     @InjectMocks
     VehicleController vehicleController;
 
@@ -49,6 +52,8 @@ public class EditVehicleControllerTest {
     public void editVehicleFromGarage() throws Exception {
         VehicleEntity vehicleEntity = new VehicleEntity();
         when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(vehicleEntity);
+
+        when(vehicleResponseMapper.map(any(VehicleRequest.class), anyString(), anyString())).thenReturn(vehicleEntity);
 
         mockMvc.perform(put("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
                 .accept(MediaType.APPLICATION_JSON)
