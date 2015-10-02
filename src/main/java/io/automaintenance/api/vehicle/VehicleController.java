@@ -38,7 +38,6 @@ public class VehicleController {
         }
 
         String vehicleId = UUID.randomUUID().toString();
-
         VehicleEntity vehicleEntityResponse =
                 vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
 
@@ -71,8 +70,8 @@ public class VehicleController {
     @ResponseStatus(HttpStatus.OK)
     public List<VehicleEntity> findAllVehiclesInGarage(@PathVariable String garageId) {
 
-        List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);
         //TODO:Check this logic.. Should check for vehicle existence first
+        List<VehicleEntity> vehicleEntityList = vehicleRepository.findAllByGarageId(garageId);
         if (vehicleEntityList == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
@@ -87,7 +86,7 @@ public class VehicleController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteVehicleInGarage(@PathVariable String garageId,
                                       @PathVariable String vehicleId) {
-        if(vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId) == null) {
+        if (vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId) == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
         vehicleRepository.delete(vehicleId);
@@ -98,18 +97,16 @@ public class VehicleController {
             method = RequestMethod.PUT
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public VehicleEntity editVehicle(@PathVariable String garageId,
-                                     @PathVariable String vehicleId,
-                                     @RequestBody VehicleRequest vehicleRequest){
+    public VehicleEntity updateVehicle(@PathVariable String garageId,
+                                       @PathVariable String vehicleId,
+                                       @RequestBody VehicleRequest vehicleRequest) {
 
-        VehicleEntity vehicleEntity =
-                vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
+        VehicleEntity vehicleEntity = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
         if (vehicleEntity == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
 
-        VehicleEntity vehicleResponseEntity =
-                vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
+        VehicleEntity vehicleResponseEntity = vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
 
         vehicleRepository.save(vehicleResponseEntity);
         return vehicleResponseEntity;
