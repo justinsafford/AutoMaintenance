@@ -74,7 +74,7 @@ public class AddNewTrackerTest {
                 .andExpect(jsonPath("$.name", is("Steering issue")))
                 .andExpect(jsonPath("$.description", is("Truck dies while turning at low speeds")))
                 .andExpect(jsonPath("$.priority", is("High")))
-                .andExpect(jsonPath("$.pendingStatus", is(1)))
+                .andExpect(jsonPath("$.pendingStatus", is(true)))
                 .andExpect(status().isCreated())
                 .andReturn();
 

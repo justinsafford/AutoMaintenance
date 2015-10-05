@@ -10,7 +10,7 @@ public class TrackerEntity {
     private String name;
     private String description;
     private String priority;
-    private Byte pendingStatus;
+    private boolean pendingStatus;
 
 
     public void setVehicleId(String vehicleId) {
@@ -45,11 +45,11 @@ public class TrackerEntity {
         this.priority = priority;
     }
 
-    public Byte getPendingStatus() {
+    public boolean getPendingStatus() {
         return pendingStatus;
     }
 
-    public void setPendingStatus(Byte pendingStatus) {
+    public void setPendingStatus(boolean pendingStatus) {
         this.pendingStatus = pendingStatus;
     }
 }

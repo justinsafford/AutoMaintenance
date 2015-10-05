@@ -3,5 +3,5 @@
   "name":"Steering issue",
   "description":"Truck dies while turning at low speeds",
   "priority":"High",
-  "pendingStatus":1
+  "pendingStatus":true
 }

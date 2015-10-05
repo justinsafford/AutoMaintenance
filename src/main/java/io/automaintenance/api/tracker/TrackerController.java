@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class TrackerController {
     VehicleRepository vehicleRepository;
@@ -36,6 +38,24 @@ public class TrackerController {
         trackerRepository.save(trackerEntity);
 
         return trackerEntity;
+    }
+
+    @RequestMapping(
+            value = "/vehicles/{vehicleId}/tracker",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public List<TrackerEntity> retrieveAllTrackerItemsForVehicle(@PathVariable String vehicleId){
+
+        if (vehicleRepository.findOne(vehicleId) == null) {
+            throw new ResourcesNotFoundException("Vehicle not found");
+        }
+
+        List<TrackerEntity> trackerEntities
+                = trackerRepository.findByVehicleId(vehicleId);
+
+        return trackerEntities;
     }
 
     @RequestMapping(

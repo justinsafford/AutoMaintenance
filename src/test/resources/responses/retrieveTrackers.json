@@ -1,0 +1,16 @@
+[
+  {
+    "vehicleId":"vId",
+    "name":"name1",
+    "description":"description1",
+    "priority":"High",
+    "pendingStatus":true
+  },
+  {
+    "vehicleId":"vId",
+    "name":"name2",
+    "description":"description2",
+    "priority":"Low",
+    "pendingStatus":false
+  }
+]
