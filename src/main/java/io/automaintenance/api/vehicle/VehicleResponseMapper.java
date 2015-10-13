@@ -4,16 +4,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class VehicleResponseMapper {
-    public VehicleEntity map(VehicleRequest vehicleRequest, String garageId, String vehicleId) {
-        VehicleEntity vehicleEntity = new VehicleEntity();
+    public VehicleResponse map(VehicleRequest vehicleRequest, String garageId, String vehicleId) {
+        VehicleResponse vehicleResponse = new VehicleResponse();
 
-        vehicleEntity.setGarageId(garageId);
-        vehicleEntity.setVehicleId(vehicleId);
-        vehicleEntity.setName(vehicleRequest.getName());
-        vehicleEntity.setMake(vehicleRequest.getMake());
-        vehicleEntity.setModel(vehicleRequest.getModel());
-        vehicleEntity.setYear(vehicleRequest.getYear());
+        vehicleResponse.setGarageId(garageId);
+        vehicleResponse.setVehicleId(vehicleId);
+        vehicleResponse.setName(vehicleRequest.getName());
+        vehicleResponse.setMake(vehicleRequest.getMake());
+        vehicleResponse.setModel(vehicleRequest.getModel());
+        vehicleResponse.setYear(vehicleRequest.getYear());
 
-        return vehicleEntity;
+        return vehicleResponse;
     }
 }

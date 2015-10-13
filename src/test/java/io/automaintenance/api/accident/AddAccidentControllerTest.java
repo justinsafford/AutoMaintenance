@@ -3,7 +3,7 @@ package io.automaintenance.api.accident;
 import io.automaintenance.api.repos.AccidentRepository;
 import io.automaintenance.api.ResourcesNotFoundException;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,8 +49,8 @@ public class AddAccidentControllerTest {
 
     @Test
     public void addAccident() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        when(vehicleRepository.findOne("vId")).thenReturn(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        when(vehicleRepository.findOne("vId")).thenReturn(vehicleResponse);
 
         AccidentEntity expectedAccident = new AccidentEntity();
         when(accidentRepository.save(any(AccidentEntity.class))).thenReturn(expectedAccident);

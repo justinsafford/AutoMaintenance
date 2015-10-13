@@ -50,10 +50,10 @@ public class EditVehicleControllerTest {
 
     @Test
     public void editVehicleFromGarage() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(vehicleResponse);
 
-        when(vehicleResponseMapper.map(any(VehicleRequest.class), anyString(), anyString())).thenReturn(vehicleEntity);
+        when(vehicleResponseMapper.map(any(VehicleRequest.class), anyString(), anyString())).thenReturn(vehicleResponse);
 
         mockMvc.perform(put("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
                 .accept(MediaType.APPLICATION_JSON)
@@ -63,7 +63,7 @@ public class EditVehicleControllerTest {
 
 
         verify(vehicleRepository, times(1)).findFirstByGarageIdAndVehicleId("gId", "vId");
-        verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleEntity.class));
+        verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleResponse.class));
         verifyNoMoreInteractions(vehicleRepository);
     }
 

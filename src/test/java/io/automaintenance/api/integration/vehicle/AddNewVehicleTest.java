@@ -4,7 +4,7 @@ import io.automaintenance.api.Application;
 import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,7 +62,7 @@ public class AddNewVehicleTest {
     }
 
     @Test
-    public void addNewVehicle_Success() throws Exception {
+    public void addNewVehicle() throws Exception {
         ClassPathResource classPathResource = new ClassPathResource("requests/addVehicle.json");
         String request = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
 
@@ -78,9 +78,9 @@ public class AddNewVehicleTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        List<VehicleEntity> vehicleEntityList = vehicleRepository.findAll();
-        assertThat(vehicleEntityList.size(), is(1));
-        VehicleEntity savedVehicle = vehicleEntityList.get(0);
+        List<VehicleResponse> vehicleResponseList = vehicleRepository.findAll();
+        assertThat(vehicleResponseList.size(), is(1));
+        VehicleResponse savedVehicle = vehicleResponseList.get(0);
 
         assertThat(savedVehicle.getGarageId(), is(garageUuid));
         assertThat(savedVehicle.getVehicleId(), isA(String.class));

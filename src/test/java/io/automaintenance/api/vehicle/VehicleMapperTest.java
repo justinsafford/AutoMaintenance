@@ -25,14 +25,14 @@ public class VehicleMapperTest {
         String garageId = "garageId";
         String vehicleId = "vehicleId";
 
-        VehicleEntity mappedVehicleEntity =
+        VehicleResponse mappedVehicleResponse =
                 vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
 
-        assertThat(mappedVehicleEntity.getGarageId(), is("garageId"));
-        assertThat(mappedVehicleEntity.getVehicleId(), is("vehicleId"));
-        assertThat(mappedVehicleEntity.getName(), is("Tito"));
-        assertThat(mappedVehicleEntity.getMake(), is("Chevy"));
-        assertThat(mappedVehicleEntity.getModel(), is("Silverado"));
-        assertThat(mappedVehicleEntity.getYear(), is("2014"));
+        assertThat(mappedVehicleResponse.getGarageId(), is("garageId"));
+        assertThat(mappedVehicleResponse.getVehicleId(), is("vehicleId"));
+        assertThat(mappedVehicleResponse.getName(), is("Tito"));
+        assertThat(mappedVehicleResponse.getMake(), is("Chevy"));
+        assertThat(mappedVehicleResponse.getModel(), is("Silverado"));
+        assertThat(mappedVehicleResponse.getYear(), is("2014"));
     }
 }

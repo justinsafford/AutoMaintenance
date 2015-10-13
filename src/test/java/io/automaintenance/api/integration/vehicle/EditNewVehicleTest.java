@@ -4,7 +4,7 @@ import io.automaintenance.api.Application;
 import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,7 +68,7 @@ public class EditNewVehicleTest {
         garageEntity.setGarageName("Justin");
         garageRepository.save(garageEntity);
 
-        VehicleEntity existingVehicle = new VehicleEntity();
+        VehicleResponse existingVehicle = new VehicleResponse();
         existingVehicle.setGarageId("gIdExisting");
         existingVehicle.setVehicleId("vIdExisting");
         existingVehicle.setMake("Ford");
@@ -87,9 +87,9 @@ public class EditNewVehicleTest {
                 .andExpect(jsonPath("$.name", Matchers.is("Tito")))
                 .andReturn();
 
-        List<VehicleEntity> vehicleEntityList = vehicleRepository.findAll();
-        assertThat(vehicleEntityList.size(), is(1));
-        VehicleEntity savedVehicle = vehicleEntityList.get(0);
+        List<VehicleResponse> vehicleResponseList = vehicleRepository.findAll();
+        assertThat(vehicleResponseList.size(), is(1));
+        VehicleResponse savedVehicle = vehicleResponseList.get(0);
 
         assertThat(savedVehicle.getGarageId(), is(existingVehicle.getGarageId()));
         assertThat(savedVehicle.getVehicleId(), is(existingVehicle.getVehicleId()));

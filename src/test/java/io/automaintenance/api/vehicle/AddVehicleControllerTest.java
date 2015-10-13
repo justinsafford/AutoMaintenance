@@ -8,11 +8,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AddVehicleControllerTest {
     @Mock
     VehicleRepository vehicleRepository;
@@ -31,6 +34,9 @@ public class AddVehicleControllerTest {
 
     @Mock
     VehicleResponseMapper vehicleResponseMapper;
+
+    @Mock
+    VehicleService vehicleService;
 
     @InjectMocks
     VehicleController vehicleController;
@@ -53,18 +59,14 @@ public class AddVehicleControllerTest {
     public void addNewVehicleToGarage() throws Exception {
         GarageEntity garageEntity = new GarageEntity();
         garageEntity.setGarageId("id");
-        garageEntity.setGarageName("testName");
-
 
         GarageEntity expectedGarageEntity = new GarageEntity();
         when(garageRepository.findOne(garageEntity.getGarageId()))
                 .thenReturn(expectedGarageEntity);
 
-        VehicleRequest vehicleRequest = new VehicleRequest();
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        String garageId = "garageId";
-        String vehicleId = "vehicleId";
-        when(vehicleResponseMapper.map(any(VehicleRequest.class), anyString(), anyString())).thenReturn(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        when(vehicleService.addNewVehicle(any(VehicleRequest.class), anyString(), anyString()))
+                .thenReturn(vehicleResponse);
 
         mockMvc.perform(post("/garages/{garageId}/vehicles", garageEntity.getGarageId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -72,7 +74,7 @@ public class AddVehicleControllerTest {
                 .content("{}"))
                 .andExpect(status().isCreated());
 
-        verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleEntity.class));
+        verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleResponse.class));
         verifyNoMoreInteractions(vehicleRepository);
     }
 

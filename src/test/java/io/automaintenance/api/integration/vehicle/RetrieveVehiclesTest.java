@@ -4,7 +4,7 @@ import io.automaintenance.api.Application;
 import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,28 +68,28 @@ public class RetrieveVehiclesTest {
 
         garageRepository.save(expectedGarage);
 
-        VehicleEntity vehicleEntity = new VehicleEntity();
+        VehicleResponse vehicleResponse = new VehicleResponse();
 
-        vehicleEntity.setGarageId(UUID.randomUUID().toString());
+        vehicleResponse.setGarageId(UUID.randomUUID().toString());
 
         String vehicleUuid = UUID.randomUUID().toString();
-        vehicleEntity.setVehicleId(vehicleUuid);
-        vehicleEntity.setGarageId(garageUuid);
-        vehicleEntity.setYear("2004");
-        vehicleEntity.setMake("Chevy");
-        vehicleEntity.setModel("Silverado");
-        vehicleEntity.setName("Taylor");
+        vehicleResponse.setVehicleId(vehicleUuid);
+        vehicleResponse.setGarageId(garageUuid);
+        vehicleResponse.setYear("2004");
+        vehicleResponse.setMake("Chevy");
+        vehicleResponse.setModel("Silverado");
+        vehicleResponse.setName("Taylor");
 
-        VehicleEntity vehicleEntity2 = new VehicleEntity();
-        vehicleEntity2.setGarageId(UUID.randomUUID().toString());
-        vehicleEntity2.setVehicleId(UUID.randomUUID().toString());
-        vehicleEntity2.setYear("sfas");
-        vehicleEntity2.setMake("asdfas");
-        vehicleEntity2.setModel("sdafas");
-        vehicleEntity2.setName("sdga");
+        VehicleResponse vehicleResponse2 = new VehicleResponse();
+        vehicleResponse2.setGarageId(UUID.randomUUID().toString());
+        vehicleResponse2.setVehicleId(UUID.randomUUID().toString());
+        vehicleResponse2.setYear("sfas");
+        vehicleResponse2.setMake("asdfas");
+        vehicleResponse2.setModel("sdafas");
+        vehicleResponse2.setName("sdga");
 
-        vehicleRepository.save(vehicleEntity);
-        vehicleRepository.save(vehicleEntity2);
+        vehicleRepository.save(vehicleResponse);
+        vehicleRepository.save(vehicleResponse2);
 
         mockMvc.perform(get("/garages/{garageId}/vehicles/{vehicleId}", garageUuid, vehicleUuid))
                 .andExpect(jsonPath("$.garageId", is(garageUuid)))
@@ -112,25 +112,25 @@ public class RetrieveVehiclesTest {
 
         garageRepository.save(expectedGarage);
 
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        vehicleEntity.setGarageId(UUID.randomUUID().toString());
-        vehicleEntity.setGarageId("gId");
-        vehicleEntity.setVehicleId("vId1");
-        vehicleEntity.setYear("2004");
-        vehicleEntity.setMake("Chevy");
-        vehicleEntity.setModel("Silverado");
-        vehicleEntity.setName("Taylor");
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        vehicleResponse.setGarageId(UUID.randomUUID().toString());
+        vehicleResponse.setGarageId("gId");
+        vehicleResponse.setVehicleId("vId1");
+        vehicleResponse.setYear("2004");
+        vehicleResponse.setMake("Chevy");
+        vehicleResponse.setModel("Silverado");
+        vehicleResponse.setName("Taylor");
 
-        VehicleEntity vehicleEntity2 = new VehicleEntity();
-        vehicleEntity2.setGarageId("gId");
-        vehicleEntity2.setVehicleId("vId2");
-        vehicleEntity2.setYear("2014");
-        vehicleEntity2.setMake("Chevy");
-        vehicleEntity2.setModel("Silverado");
-        vehicleEntity2.setName("Tito");
+        VehicleResponse vehicleResponse2 = new VehicleResponse();
+        vehicleResponse2.setGarageId("gId");
+        vehicleResponse2.setVehicleId("vId2");
+        vehicleResponse2.setYear("2014");
+        vehicleResponse2.setMake("Chevy");
+        vehicleResponse2.setModel("Silverado");
+        vehicleResponse2.setName("Tito");
 
-        vehicleRepository.save(vehicleEntity);
-        vehicleRepository.save(vehicleEntity2);
+        vehicleRepository.save(vehicleResponse);
+        vehicleRepository.save(vehicleResponse2);
 
         ClassPathResource classPathResource = new ClassPathResource("responses/retrieveVehicles.json");
         String expectedBody = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));

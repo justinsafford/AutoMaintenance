@@ -4,7 +4,7 @@ import io.automaintenance.api.repos.TrackerRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import io.automaintenance.api.tracker.TrackerController;
 import io.automaintenance.api.tracker.TrackerEntity;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,8 +54,8 @@ public class TrackerControllerTest {
 
     @Test
     public void addTracker() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        when(vehicleRepository.findOne("vId")).thenReturn(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        when(vehicleRepository.findOne("vId")).thenReturn(vehicleResponse);
 
         TrackerEntity expectedTracker = new TrackerEntity();
         when(trackerRepository.save(any(TrackerEntity.class))).thenReturn(expectedTracker);
@@ -94,7 +94,7 @@ public class TrackerControllerTest {
 
     @Test
     public void retrieveTrackerByVehicleId() throws Exception {
-        when(vehicleRepository.findOne("vId")).thenReturn(new VehicleEntity());
+        when(vehicleRepository.findOne("vId")).thenReturn(new VehicleResponse());
         when(trackerRepository.findByVehicleId("vId")).thenReturn(new ArrayList<TrackerEntity>());
 
         mockMvc.perform(get("/vehicles/{vId}/tracker", "vId")

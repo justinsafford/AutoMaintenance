@@ -46,9 +46,9 @@ public class DeleteVehicleControllerTest {
 
     @Test
     public void deleteGarage() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
+        VehicleResponse vehicleResponse = new VehicleResponse();
         when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
-                .thenReturn(vehicleEntity);
+                .thenReturn(vehicleResponse);
 
         mockMvc.perform(delete("/garages/{gId}/vehicles/{vId}", "gId", "vId")
                 .accept(MediaType.APPLICATION_JSON)

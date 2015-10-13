@@ -5,7 +5,7 @@ import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import io.automaintenance.api.vehicle.VehicleController;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,12 +67,12 @@ public class DeleteVehicleTest {
 
         garageRepository.save(expectedGarage);
 
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        vehicleEntity.setGarageId(garageUuid);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        vehicleResponse.setGarageId(garageUuid);
         String vehicleUuid = UUID.randomUUID().toString();
-        vehicleEntity.setVehicleId(vehicleUuid);
+        vehicleResponse.setVehicleId(vehicleUuid);
 
-        vehicleRepository.save(vehicleEntity);
+        vehicleRepository.save(vehicleResponse);
 
         assertThat(garageRepository.count(), is(1L));
         assertThat(vehicleRepository.count(), is(1L));

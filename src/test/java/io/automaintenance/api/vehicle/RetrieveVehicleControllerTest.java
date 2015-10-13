@@ -50,8 +50,8 @@ public class RetrieveVehicleControllerTest {
 
     @Test
     public void retrieveVehicleFromGarage() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(vehicleResponse);
 
         mockMvc.perform(get("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
                 .accept(MediaType.APPLICATION_JSON)
@@ -65,8 +65,8 @@ public class RetrieveVehicleControllerTest {
 
     @Test
     public void retrieveMultipleVehiclesFromGarage() throws Exception {
-        List<VehicleEntity> vehicleEntityList = new ArrayList();
-        when(vehicleRepository.findAllByGarageId("gId")).thenReturn(vehicleEntityList);
+        List<VehicleResponse> vehicleResponseList = new ArrayList();
+        when(vehicleRepository.findAllByGarageId("gId")).thenReturn(vehicleResponseList);
 
         mockMvc.perform(get("/garages/{garageId}/vehicles", "gId")
                 .accept(MediaType.APPLICATION_JSON)

@@ -2,7 +2,7 @@ package io.automaintenance.api.vehicle;
 
 import org.springframework.data.annotation.Id;
 
-public class VehicleEntity {
+public class VehicleResponse {
     @Id
     private String vehicleId;
 

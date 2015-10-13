@@ -4,7 +4,7 @@ import io.automaintenance.api.Application;
 import io.automaintenance.api.tracker.TrackerEntity;
 import io.automaintenance.api.repos.TrackerRepository;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,9 +63,9 @@ public class AddNewTrackerTest {
         ClassPathResource classPathResource = new ClassPathResource("requests/addTracker.json");
         String request = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
 
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        vehicleEntity.setVehicleId("vId");
-        vehicleRepository.save(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        vehicleResponse.setVehicleId("vId");
+        vehicleRepository.save(vehicleResponse);
 
         mockMvc.perform(post("/vehicles/{vehicleId}/tracker", "vId")
                 .content(request)

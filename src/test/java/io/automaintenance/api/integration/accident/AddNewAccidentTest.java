@@ -4,7 +4,7 @@ import io.automaintenance.api.accident.AccidentEntity;
 import io.automaintenance.api.repos.AccidentRepository;
 import io.automaintenance.api.Application;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,9 +63,9 @@ public class AddNewAccidentTest {
         ClassPathResource classPathResource = new ClassPathResource("requests/addAccident.json");
         String request = new String(Files.readAllBytes(Paths.get(classPathResource.getURI())));
 
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        vehicleEntity.setVehicleId("vId");
-        vehicleRepository.save(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        vehicleResponse.setVehicleId("vId");
+        vehicleRepository.save(vehicleResponse);
 
         mockMvc.perform(post("/vehicles/{vehicleId}/accidents", "vId")
                 .content(request)

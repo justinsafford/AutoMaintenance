@@ -4,7 +4,7 @@ import io.automaintenance.api.Application;
 import io.automaintenance.api.repos.TrackerRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import io.automaintenance.api.tracker.TrackerEntity;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,10 +58,10 @@ public class RetrieveTrackerTest {
 
     @Test
     public void retrieveMultipleAccidents() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        vehicleEntity.setVehicleId("vId");
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        vehicleResponse.setVehicleId("vId");
 
-        vehicleRepository.save(vehicleEntity);
+        vehicleRepository.save(vehicleResponse);
 
         TrackerEntity trackerEntity = new TrackerEntity();
         trackerEntity.setVehicleId("vId");

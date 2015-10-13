@@ -4,7 +4,7 @@ import io.automaintenance.api.maintenance.MaintenanceController;
 import io.automaintenance.api.maintenance.MaintenanceEntity;
 import io.automaintenance.api.repos.MaintenanceRepository;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,8 +51,8 @@ public class MaintenanceControllerTest {
 
     @Test
     public void addMaintenance() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        when(vehicleRepository.findOne("vId")).thenReturn(vehicleEntity);
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        when(vehicleRepository.findOne("vId")).thenReturn(vehicleResponse);
 
         MaintenanceEntity expectedMaintenance = new MaintenanceEntity();
         when(maintenanceRepository.save(any(MaintenanceEntity.class))).thenReturn(expectedMaintenance);

@@ -4,7 +4,7 @@ import io.automaintenance.api.Application;
 import io.automaintenance.api.accident.AccidentEntity;
 import io.automaintenance.api.repos.AccidentRepository;
 import io.automaintenance.api.repos.VehicleRepository;
-import io.automaintenance.api.vehicle.VehicleEntity;
+import io.automaintenance.api.vehicle.VehicleResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,17 +59,16 @@ public class RetrieveAccidentsTest {
 
     @Test
     public void retrieveMultipleAccidents() throws Exception {
-        VehicleEntity vehicleEntity = new VehicleEntity();
-        vehicleEntity.setVehicleId("vId");
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        vehicleResponse.setVehicleId("vId");
 
-        vehicleRepository.save(vehicleEntity);
+        vehicleRepository.save(vehicleResponse);
 
         AccidentEntity accidentEntity1 = new AccidentEntity();
         accidentEntity1.setVehicleId("vId");
         accidentEntity1.setType("type1");
         accidentEntity1.setDescription("description1");
         accidentEntity1.setDamageLevel("damage1");
-
 
         AccidentEntity accidentEntity2 = new AccidentEntity();
         accidentEntity2.setVehicleId("vId");
