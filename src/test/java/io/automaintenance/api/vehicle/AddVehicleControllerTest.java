@@ -1,7 +1,6 @@
 package io.automaintenance.api.vehicle;
 
 import io.automaintenance.api.ResourcesNotFoundException;
-import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import org.junit.Before;
@@ -10,7 +9,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -20,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -57,25 +55,15 @@ public class AddVehicleControllerTest {
 
     @Test
     public void addNewVehicleToGarage() throws Exception {
-        GarageEntity garageEntity = new GarageEntity();
-        garageEntity.setGarageId("id");
-
-        GarageEntity expectedGarageEntity = new GarageEntity();
-        when(garageRepository.findOne(garageEntity.getGarageId()))
-                .thenReturn(expectedGarageEntity);
-
         VehicleResponse vehicleResponse = new VehicleResponse();
-        when(vehicleService.addNewVehicle(any(VehicleRequest.class), anyString()))
+        when(vehicleService.addVehicle(any(VehicleRequest.class), anyString()))
                 .thenReturn(vehicleResponse);
 
-        mockMvc.perform(post("/garages/{garageId}/vehicles", garageEntity.getGarageId())
+        mockMvc.perform(post("/garages/{garageId}/vehicles", "garage-id")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isCreated());
-
-        verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleResponse.class));
-        verifyNoMoreInteractions(vehicleRepository);
     }
 
     @Test

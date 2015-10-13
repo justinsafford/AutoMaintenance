@@ -1,7 +1,6 @@
 package io.automaintenance.api.vehicle;
 
 import io.automaintenance.api.ResourcesNotFoundException;
-import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,19 +11,14 @@ import java.util.List;
 
 @RestController
 public class VehicleController {
-    GarageRepository garageRepository;
+    @Autowired
     VehicleRepository vehicleRepository;
+
+    @Autowired
     VehicleResponseMapper vehicleResponseMapper;
 
     @Autowired
     VehicleService vehicleService;
-
-    @Autowired
-    public VehicleController(GarageRepository garageRepository, VehicleRepository vehicleRepository, VehicleResponseMapper vehicleResponseMapper) {
-        this.garageRepository = garageRepository;
-        this.vehicleRepository = vehicleRepository;
-        this.vehicleResponseMapper = vehicleResponseMapper;
-    }
 
     @RequestMapping(
             value = "/garages/{garageId}/vehicles",
@@ -33,14 +27,8 @@ public class VehicleController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public VehicleResponse addNewVehicleToGarage(@PathVariable String garageId,
-                                               @RequestBody VehicleRequest vehicleRequest) {
-
-        VehicleResponse vehicleResponseResponse
-                = vehicleService.addNewVehicle(vehicleRequest, garageId);
-
-        vehicleRepository.save(vehicleResponseResponse);
-
-        return vehicleResponseResponse;
+                                                 @RequestBody VehicleRequest vehicleRequest) {
+        return vehicleService.addVehicle(vehicleRequest, garageId);
     }
 
     @RequestMapping(
@@ -50,7 +38,7 @@ public class VehicleController {
     )
     @ResponseStatus(HttpStatus.OK)
     public VehicleResponse findVehicleInGarage(@PathVariable String garageId,
-                                             @PathVariable String vehicleId) {
+                                               @PathVariable String vehicleId) {
 
         VehicleResponse vehicleResponse = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
         if (vehicleResponse == null) {
@@ -95,8 +83,8 @@ public class VehicleController {
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
     public VehicleResponse updateVehicle(@PathVariable String garageId,
-                                       @PathVariable String vehicleId,
-                                       @RequestBody VehicleRequest vehicleRequest) {
+                                         @PathVariable String vehicleId,
+                                         @RequestBody VehicleRequest vehicleRequest) {
 
         VehicleResponse vehicleResponse = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
         if (vehicleResponse == null) {

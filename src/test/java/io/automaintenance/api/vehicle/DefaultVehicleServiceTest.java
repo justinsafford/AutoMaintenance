@@ -3,6 +3,7 @@ package io.automaintenance.api.vehicle;
 import io.automaintenance.api.ResourcesNotFoundException;
 import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
+import io.automaintenance.api.repos.VehicleRepository;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,12 +17,17 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.hamcrest.Matchers.isA;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultVehicleServiceTest {
     @Mock
     private GarageRepository garageRepository;
+
+    @Mock
+    private VehicleRepository vehicleRepository;
 
     @Mock
     private VehicleResponseMapper vehicleResponseMapper;
@@ -31,8 +37,6 @@ public class DefaultVehicleServiceTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
-
-
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -46,7 +50,13 @@ public class DefaultVehicleServiceTest {
         when(vehicleResponseMapper.map(any(VehicleRequest.class), anyString(), anyString()))
                 .thenReturn(vehicleResponse);
 
-        defaultVehicleService.addNewVehicle(any(VehicleRequest.class), "garage-id");
+        when(vehicleRepository.save(vehicleResponse))
+                .thenReturn(vehicleResponse);
+
+        defaultVehicleService.addVehicle(any(VehicleRequest.class), "garage-id");
+
+        verify(garageRepository, times(1)).findOne(anyString());
+        verify(vehicleRepository, times(1)).save(any(VehicleResponse.class));
     }
 
     @Test
@@ -56,6 +66,6 @@ public class DefaultVehicleServiceTest {
         expectedException.expect(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Garage not found");
 
-        defaultVehicleService.addNewVehicle(any(VehicleRequest.class), "garage-id");
+        defaultVehicleService.addVehicle(any(VehicleRequest.class), "garage-id");
     }
 }
