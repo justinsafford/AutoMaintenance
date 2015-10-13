@@ -29,7 +29,7 @@ public class AddAccidentControllerTest {
     AccidentRepository accidentRepository;
 
     @Mock
-    private VehicleRepository vehicleRepository;
+    VehicleRepository vehicleRepository;
 
     @InjectMocks
     AccidentController accidentController;

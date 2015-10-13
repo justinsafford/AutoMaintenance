@@ -65,7 +65,7 @@ public class AddVehicleControllerTest {
                 .thenReturn(expectedGarageEntity);
 
         VehicleResponse vehicleResponse = new VehicleResponse();
-        when(vehicleService.addNewVehicle(any(VehicleRequest.class), anyString(), anyString()))
+        when(vehicleService.addNewVehicle(any(VehicleRequest.class), anyString()))
                 .thenReturn(vehicleResponse);
 
         mockMvc.perform(post("/garages/{garageId}/vehicles", garageEntity.getGarageId())
@@ -76,21 +76,6 @@ public class AddVehicleControllerTest {
 
         verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleResponse.class));
         verifyNoMoreInteractions(vehicleRepository);
-    }
-
-    @Test
-    public void addNewVehicleWithUnknownGarage_throwsRNFException() throws Exception {
-        GarageEntity garageEntity = new GarageEntity();
-        when(garageRepository.findOne(garageEntity.getGarageId())).thenReturn(null);
-
-        expectedException.expectCause(isA(ResourcesNotFoundException.class));
-        expectedException.expectMessage("Garage not found");
-
-        mockMvc.perform(post("/garages/{garageId}/vehicles", "id")
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andReturn();
     }
 
     @Test

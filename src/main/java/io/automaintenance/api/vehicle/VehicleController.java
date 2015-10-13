@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class VehicleController {
@@ -36,14 +35,8 @@ public class VehicleController {
     public VehicleResponse addNewVehicleToGarage(@PathVariable String garageId,
                                                @RequestBody VehicleRequest vehicleRequest) {
 
-        if (garageRepository.findOne(garageId) == null) {
-            throw new ResourcesNotFoundException("Garage not found");
-        }
-
-        String vehicleId = UUID.randomUUID().toString();
-
         VehicleResponse vehicleResponseResponse
-                = vehicleService.addNewVehicle(vehicleRequest, garageId, vehicleId);
+                = vehicleService.addNewVehicle(vehicleRequest, garageId);
 
         vehicleRepository.save(vehicleResponseResponse);
 
