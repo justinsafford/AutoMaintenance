@@ -1,6 +1,5 @@
 package io.automaintenance.api.vehicle;
 
-import io.automaintenance.api.ResourcesNotFoundException;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import org.junit.Before;
@@ -8,15 +7,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.isA;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -31,6 +32,9 @@ public class EditVehicleControllerTest {
     @Mock
     private VehicleResponseMapper vehicleResponseMapper;
 
+    @Mock
+    private VehicleService vehicleService;
+
     @InjectMocks
     VehicleController vehicleController;
 
@@ -38,7 +42,6 @@ public class EditVehicleControllerTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     MockMvc mockMvc;
-
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
@@ -50,10 +53,9 @@ public class EditVehicleControllerTest {
 
     @Test
     public void editVehicleFromGarage() throws Exception {
+        VehicleRequest vehicleRequest = new VehicleRequest();
         VehicleResponse vehicleResponse = new VehicleResponse();
-        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(vehicleResponse);
-
-        when(vehicleResponseMapper.map(any(VehicleRequest.class), anyString(), anyString())).thenReturn(vehicleResponse);
+        when(vehicleService.editVehicle(vehicleRequest, "gId", "vId")).thenReturn(vehicleResponse);
 
         mockMvc.perform(put("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
                 .accept(MediaType.APPLICATION_JSON)
@@ -61,23 +63,6 @@ public class EditVehicleControllerTest {
                 .content("{}"))
                 .andExpect(status().isAccepted());
 
-
-        verify(vehicleRepository, times(1)).findFirstByGarageIdAndVehicleId("gId", "vId");
-        verify(vehicleRepository, times(1)).save(Matchers.isA(VehicleResponse.class));
-        verifyNoMoreInteractions(vehicleRepository);
-    }
-
-    @Test
-    public void editUnknownVehicle_throwsRNFException() throws Exception {
-        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(null);
-
-        expectedException.expectCause(isA(ResourcesNotFoundException.class));
-        expectedException.expectMessage("Vehicle not found");
-
-        mockMvc.perform(put("/garages/{garageId}/vehicles/{vehicleId}", "gId", "vId")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isOk());
+        verify(vehicleService, times(1)).editVehicle(any(VehicleRequest.class), anyString(), anyString());
     }
 }

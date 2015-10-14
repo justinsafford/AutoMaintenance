@@ -39,13 +39,7 @@ public class VehicleController {
     @ResponseStatus(HttpStatus.OK)
     public VehicleResponse findVehicleInGarage(@PathVariable String garageId,
                                                @PathVariable String vehicleId) {
-
-        VehicleResponse vehicleResponse = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
-        if (vehicleResponse == null) {
-            throw new ResourcesNotFoundException("Vehicle not found");
-        }
-
-        return vehicleResponse;
+        return vehicleService.findVehicle(garageId, vehicleId);
     }
 
     @RequestMapping(
@@ -54,13 +48,7 @@ public class VehicleController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<VehicleResponse> findAllVehiclesInGarage(@PathVariable String garageId) {
-
-        //TODO:Check this logic.. Should check for vehicle existence first
-        List<VehicleResponse> vehicleResponseList = vehicleRepository.findAllByGarageId(garageId);
-        if (vehicleResponseList == null) {
-            throw new ResourcesNotFoundException("Vehicle not found");
-        }
-        return vehicleResponseList;
+        return vehicleService.findAllVehicles(garageId);
     }
 
     @RequestMapping(
@@ -77,6 +65,7 @@ public class VehicleController {
         vehicleRepository.delete(vehicleId);
     }
 
+    //TODO: Think this should be patch?
     @RequestMapping(
             value = "/garages/{garageId}/vehicles/{vehicleId}",
             method = RequestMethod.PUT
@@ -85,16 +74,7 @@ public class VehicleController {
     public VehicleResponse updateVehicle(@PathVariable String garageId,
                                          @PathVariable String vehicleId,
                                          @RequestBody VehicleRequest vehicleRequest) {
-
-        VehicleResponse vehicleResponse = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
-        if (vehicleResponse == null) {
-            throw new ResourcesNotFoundException("Vehicle not found");
-        }
-
-        VehicleResponse vehicleResponseEntity = vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
-
-        vehicleRepository.save(vehicleResponseEntity);
-        return vehicleResponseEntity;
+        return vehicleService.editVehicle(vehicleRequest, garageId, vehicleId);
     }
 
     @RequestMapping(

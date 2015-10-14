@@ -1,8 +1,6 @@
 package io.automaintenance.api.vehicle;
 
 import io.automaintenance.api.ResourcesNotFoundException;
-import io.automaintenance.api.repos.GarageRepository;
-import io.automaintenance.api.repos.VehicleRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,15 +22,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 @RunWith(MockitoJUnitRunner.class)
 public class AddVehicleControllerTest {
-    @Mock
-    VehicleRepository vehicleRepository;
-
-    @Mock
-    GarageRepository garageRepository;
-
-    @Mock
-    VehicleResponseMapper vehicleResponseMapper;
-
     @Mock
     VehicleService vehicleService;
 

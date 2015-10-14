@@ -5,7 +5,6 @@ import io.automaintenance.api.garage.GarageEntity;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import io.automaintenance.api.vehicle.VehicleResponse;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +26,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -84,7 +82,6 @@ public class EditNewVehicleTest {
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.name", Matchers.is("Tito")))
                 .andReturn();
 
         List<VehicleResponse> vehicleResponseList = vehicleRepository.findAll();
