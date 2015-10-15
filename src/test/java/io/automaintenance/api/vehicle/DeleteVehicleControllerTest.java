@@ -1,6 +1,5 @@
 package io.automaintenance.api.vehicle;
 
-import io.automaintenance.api.ResourcesNotFoundException;
 import io.automaintenance.api.repos.GarageRepository;
 import io.automaintenance.api.repos.VehicleRepository;
 import org.junit.Before;
@@ -14,7 +13,6 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,32 +43,12 @@ public class DeleteVehicleControllerTest {
     }
 
     @Test
-    public void deleteGarage() throws Exception {
+    public void deleteVehicle() throws Exception {
         VehicleResponse vehicleResponse = new VehicleResponse();
         when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
                 .thenReturn(vehicleResponse);
 
         mockMvc.perform(delete("/garages/{gId}/vehicles/{vId}", "gId", "vId")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        verify(vehicleRepository, times(1)).findFirstByGarageIdAndVehicleId("gId", "vId");
-        verify(vehicleRepository, times(1)).delete("vId");
-        verifyNoMoreInteractions(vehicleRepository);
-    }
-
-    @Test
-    public void deleteGarageWithUnknownVehicleId_throwsRNFException() throws Exception {
-        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
-                .thenReturn(null);
-
-        expectedException.expectCause(isA(ResourcesNotFoundException.class));
-        expectedException.expectMessage("Vehicle not found");
-
-        mockMvc.perform(delete("/garages/{garageId}/vehicles/{vehicleId}", "garageId", "vehicleId")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))

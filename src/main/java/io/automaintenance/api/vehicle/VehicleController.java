@@ -15,9 +15,6 @@ public class VehicleController {
     VehicleRepository vehicleRepository;
 
     @Autowired
-    VehicleResponseMapper vehicleResponseMapper;
-
-    @Autowired
     VehicleService vehicleService;
 
     @RequestMapping(

@@ -10,4 +10,6 @@ public interface VehicleService {
     List<VehicleResponse> findAllVehicles(String garageId);
 
     VehicleResponse editVehicle(VehicleRequest vehicleRequest, String garageId, String vehicleId);
+
+    void deleteVehicle(String garageId, String vehicleId);
 }

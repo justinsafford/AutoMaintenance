@@ -76,7 +76,7 @@ public class DefaultVehicleServiceTest {
     }
 
     @Test
-    public void addNewVehicleWithUnknownGarage_throwsRNFException() throws Exception {
+    public void throwRNFExceptionWhenAddNewVehicleWithUnknownGarage() throws Exception {
         when(garageRepository.findOne(anyString())).thenReturn(null);
 
         expectedException.expect(isA(ResourcesNotFoundException.class));
@@ -86,7 +86,7 @@ public class DefaultVehicleServiceTest {
     }
 
     @Test
-    public void retrieveVehicleWithUnknownGarageId_throwsRNFException() {
+    public void throwRNFExceptionWhenRetrieveVehicleWithUnknownGarageId() {
         when(vehicleRepository.findFirstByGarageIdAndVehicleId("garage-id", "vehicle-id"))
                 .thenReturn(null);
 
@@ -97,7 +97,7 @@ public class DefaultVehicleServiceTest {
     }
 
     @Test
-    public void retrieveVehicleWithUnknownVehicleId_throwsRNFException() {
+    public void throwRNFExceptionWhenRetrieveVehicleWithUnknownVehicleId() {
         when(vehicleRepository.findFirstByGarageIdAndVehicleId("garage-id", "vehicle-id"))
                 .thenReturn(null);
 
@@ -119,7 +119,7 @@ public class DefaultVehicleServiceTest {
     }
 
     @Test
-    public void retrieveMultipleVehiclesWithUnknownVehiclesInGarage_throwsRNFException() throws Exception {
+    public void throwRNFExceptionWhenRetrieveMultipleVehiclesWithUnknownVehiclesInGarage() throws Exception {
         when(vehicleRepository.findAllByGarageId("gId")).thenReturn(null);
 
         expectedException.expect(Is.isA(ResourcesNotFoundException.class));
@@ -145,12 +145,36 @@ public class DefaultVehicleServiceTest {
     }
 
     @Test
-    public void editUnknownVehicle_throwsRNFException() throws Exception {
+    public void throwRNFExceptionWhenEditUnknownVehicle() throws Exception {
         when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId")).thenReturn(null);
 
         expectedException.expect(isA(ResourcesNotFoundException.class));
         expectedException.expectMessage("Vehicle not found");
 
         defaultVehicleService.editVehicle(new VehicleRequest(), "gId", "vId");
+    }
+
+    @Test
+    public void deleteVehicle() throws Exception {
+        VehicleResponse vehicleResponse = new VehicleResponse();
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
+                .thenReturn(vehicleResponse);
+
+        defaultVehicleService.deleteVehicle("gId", "vId");
+
+        verify(vehicleRepository, times(1)).findFirstByGarageIdAndVehicleId("gId", "vId");
+        verify(vehicleRepository, times(1)).delete("vId");
+        verifyNoMoreInteractions(vehicleRepository);
+    }
+
+    @Test
+    public void deleteVehicleWithUnknownVehicleId_throwsRNFException() throws Exception {
+        when(vehicleRepository.findFirstByGarageIdAndVehicleId("gId", "vId"))
+                .thenReturn(null);
+
+        expectedException.expect(Is.isA(ResourcesNotFoundException.class));
+        expectedException.expectMessage("Vehicle not found");
+
+        defaultVehicleService.deleteVehicle("gId", "vId");
     }
 }

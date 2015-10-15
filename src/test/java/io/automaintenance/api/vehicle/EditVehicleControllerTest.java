@@ -1,7 +1,5 @@
 package io.automaintenance.api.vehicle;
 
-import io.automaintenance.api.repos.GarageRepository;
-import io.automaintenance.api.repos.VehicleRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,23 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class EditVehicleControllerTest {
-    @Mock
-    VehicleRepository vehicleRepository;
-
-    @Mock
-    GarageRepository garageRepository;
-
-    @Mock
-    private VehicleResponseMapper vehicleResponseMapper;
-
     @Mock
     private VehicleService vehicleService;
 

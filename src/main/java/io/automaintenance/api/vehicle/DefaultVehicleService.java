@@ -61,7 +61,8 @@ public class DefaultVehicleService implements VehicleService{
 
     @Override
     public VehicleResponse editVehicle(VehicleRequest vehicleRequest, String garageId, String vehicleId) {
-        VehicleResponse vehicleResponse = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
+        VehicleResponse vehicleResponse
+                = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
         if (vehicleResponse == null) {
             throw new ResourcesNotFoundException("Vehicle not found");
         }
@@ -69,5 +70,17 @@ public class DefaultVehicleService implements VehicleService{
         vehicleResponse  = vehicleResponseMapper.map(vehicleRequest, garageId, vehicleId);
 
         return vehicleRepository.save(vehicleResponse);
+    }
+
+    @Override
+    public void deleteVehicle(String garageId, String vehicleId) {
+        VehicleResponse vehicle
+                = vehicleRepository.findFirstByGarageIdAndVehicleId(garageId, vehicleId);
+
+        if(vehicle == null) {
+            throw new ResourcesNotFoundException("Vehicle not found");
+        }
+
+        vehicleRepository.delete(vehicleId);
     }
 }
