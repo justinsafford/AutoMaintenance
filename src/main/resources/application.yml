@@ -1,0 +1,17 @@
+server.port: 8082
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost/autoDb_local
+      port: 27017
+
+---
+#TODO:Fix active profiles
+spring.profiles: test
+
+spring:
+  data:
+    mongo:
+      uri: mongodb://localhost/autoDb_test
+      port: 27017
