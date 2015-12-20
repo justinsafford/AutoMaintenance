@@ -9,6 +9,8 @@ buildscript {
 
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.1.1'
+
     }
 }
 apply plugin: 'java'
@@ -21,7 +23,8 @@ group = 'com.justin.auto'
 archivesBaseName = 'auto-maintenance'
 version = '1.0'
 
-
+apply from: "$projectDir/gradle/config.gradle"
+apply from: "$projectDir/gradle/deployment.gradle"
 
 
 repositories {

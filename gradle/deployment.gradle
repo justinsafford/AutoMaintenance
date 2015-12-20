@@ -1,0 +1,32 @@
+apply plugin: 'cloudfoundry'
+
+ext {
+    cfUsername = 'justin.safford@gmail.com'
+    cfPassword = 'truelove1'
+}
+
+configurations {
+    autoMaint
+}
+
+cloudfoundry {
+    username = cfUsername
+    password = cfPassword
+
+    target = config.cf.target
+    space = config.cf.space
+    uri = config.cf.uri
+    application = config.cf.application
+    memory = 512
+    file = file("${buildDir}/libs/${archivesBaseName}-${version}.jar")
+
+    startApp = false
+
+    services {
+        'autoDb' {
+            label = "mongolab"
+            plan = "sandbox"
+            bind = true
+        }
+    }
+}
