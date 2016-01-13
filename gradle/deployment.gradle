@@ -1,8 +1,8 @@
 apply plugin: 'cloudfoundry'
 
 ext {
-    cfUsername = 'justin.safford@gmail.com'
-    cfPassword = 'truelove1'
+    cfUsername = project.hasProperty('cfUsername') ? cfUsername : ''
+    cfPassword = project.hasProperty('cfPassword') ? cfPassword : ''
 }
 
 configurations {

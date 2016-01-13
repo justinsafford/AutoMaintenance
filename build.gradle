@@ -27,6 +27,7 @@ archivesBaseName = 'auto-maintenance'
 version = '1.0'
 
 apply from: "$projectDir/gradle/config.gradle"
+apply from: "$projectDir/gradle/distribution.gradle"
 apply from: "$projectDir/gradle/deployment.gradle"
 apply from: "$projectDir/gradle/codeQuality.gradle"
 
