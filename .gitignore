@@ -5,3 +5,4 @@ AutoMaint-Program.iml
 .gradle
 .gradle/*
 build/
+.DS_Store
