@@ -9,6 +9,15 @@ configurations {
     autoMaint
 }
 
+dependencies {
+    autoMaint "$group:$archivesBaseName:$version@jar"
+}
+
+task fetchDeployableJar(type: Copy) {
+    from configurations.autoMaint
+    into "$buildDir/download"
+}
+
 cloudfoundry {
     username = cfUsername
     password = cfPassword
@@ -18,7 +27,7 @@ cloudfoundry {
     uri = config.cf.uri
     application = config.cf.application
     memory = 512
-    file = file("${buildDir}/libs/${archivesBaseName}-${version}.jar")
+    file = file("${buildDir}/download/${archivesBaseName}-${version}.jar")
 
     startApp = false
 
